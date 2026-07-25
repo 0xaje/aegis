@@ -1,26 +1,121 @@
-import { Button } from '@aegis/ui';
+import * as React from 'react';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { RouteLayout } from './components/RouteLayout.js';
+import { ProtectedRoute } from './components/ProtectedRoute.js';
+import { Spinner } from '@aegis/ui';
+
+// Lazy load page views
+const Landing = React.lazy(() => import('./pages/Landing.js'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard.js'));
+const IntelligenceReport = React.lazy(() => import('./pages/IntelligenceReport.js'));
+const Simulation = React.lazy(() => import('./pages/Simulation.js'));
+const Execution = React.lazy(() => import('./pages/Execution.js'));
+const History = React.lazy(() => import('./pages/History.js'));
+const Settings = React.lazy(() => import('./pages/Settings.js'));
+const NotFound = React.lazy(() => import('./pages/NotFound.js'));
+
+// Loader Suspense boundary
+function PageSuspense({ children }: { children: React.ReactNode }) {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="w-full min-h-[300px] flex items-center justify-center">
+          <Spinner />
+        </div>
+      }
+    >
+      {children}
+    </React.Suspense>
+  );
+}
 
 function App() {
+  const [isConnected, setIsConnected] = React.useState(false);
+
   return (
-    <div className="min-h-screen bg-[#05060a] text-slate-100 flex flex-col items-center justify-center font-sans">
-      <div className="flex flex-col items-center gap-4 text-center max-w-md p-6">
-        <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-          <span className="font-bold text-lg text-white">A</span>
-        </div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-100">
-          Aegis Project Foundation
-        </h1>
-        <p className="text-xs text-slate-400 leading-relaxed font-sans">
-          Clean repository infrastructure compiles cleanly across workspaces. Ready for feature
-          integrations.
-        </p>
-        <a href="https://github.com/0xaje/aegis" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="border-slate-850 text-slate-300">
-            Open Repository
-          </Button>
-        </a>
-      </div>
-    </div>
+    <HashRouter>
+      <Routes>
+        {/* Public Route */}
+        <Route
+          path="/"
+          element={
+            <PageSuspense>
+              <Landing />
+            </PageSuspense>
+          }
+        />
+
+        {/* Core Layout containing Sidebar & Header */}
+        <Route
+          path="/app"
+          element={<RouteLayout isConnected={isConnected} setIsConnected={setIsConnected} />}
+        >
+          <Route index element={<Navigate to="/app/dashboard" replace />} />
+
+          {/* Protected Routes Tree */}
+          <Route element={<ProtectedRoute isConnected={isConnected} redirectPath="/" />}>
+            <Route
+              path="dashboard"
+              element={
+                <PageSuspense>
+                  <Dashboard />
+                </PageSuspense>
+              }
+            />
+            <Route
+              path="intelligence"
+              element={
+                <PageSuspense>
+                  <IntelligenceReport />
+                </PageSuspense>
+              }
+            />
+            <Route
+              path="simulation"
+              element={
+                <PageSuspense>
+                  <Simulation />
+                </PageSuspense>
+              }
+            />
+            <Route
+              path="execution"
+              element={
+                <PageSuspense>
+                  <Execution />
+                </PageSuspense>
+              }
+            />
+            <Route
+              path="history"
+              element={
+                <PageSuspense>
+                  <History />
+                </PageSuspense>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <PageSuspense>
+                  <Settings />
+                </PageSuspense>
+              }
+            />
+          </Route>
+        </Route>
+
+        {/* 404 Route */}
+        <Route
+          path="*"
+          element={
+            <PageSuspense>
+              <NotFound />
+            </PageSuspense>
+          }
+        />
+      </Routes>
+    </HashRouter>
   );
 }
 
