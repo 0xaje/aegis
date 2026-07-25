@@ -10,7 +10,10 @@ import {
 import { Lock } from 'lucide-react';
 
 export default function Dashboard() {
-  const { isConnected } = useAccount();
+  const { isConnected: realIsConnected } = useAccount();
+  const demoMode =
+    typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
+  const isConnected = realIsConnected || demoMode;
 
   // Mock static balances
   const mockAssets = [

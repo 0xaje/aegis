@@ -1,70 +1,111 @@
-# Aegis
+# Aegis: Confidential Financial Intelligence on Flare
 
-Aegis is a Confidential Financial Intelligence Platform built on the Flare Network.
+Aegis is a secure, institutional-grade portfolio rebalancing and risk estimation platform built on the **Flare Network**. By combining hardware-isolated compute enclaves (TEEs) with decentralized price feeds (FTSOv2), Aegis ensures user portfolios are evaluated and rebalanced with absolute privacy and tamper-proof accuracy.
 
-This repository houses the core infrastructure workspace utilizing a `pnpm` monorepo design, strict TypeScript standards, ESLint Flat Config, and Prettier formatting rules.
+---
 
-## Workspace Architecture
+## ✦ The Problem
+
+In standard DeFi:
+
+- **Exposure Leakage**: Submitting rebalance triggers publicizes target asset adjustments, exposing transactions to bot front-running.
+- **Oracle Vulnerability**: Standard tracking platforms query pricing from centralized APIs, exposing liquidations to gateway manipulation.
+- **Execution Verification Gaps**: Automated swaps cannot guarantee that the underlying asset logic aligns with audited code.
+
+## ✦ The Solution (Flare Confidential Compute)
+
+Aegis implements a secure cryptographic workflow utilizing:
+
+1. **AMD SEV-SNP/Intel SGX TEEs**: Client browser payloads are encrypted (using ECIES) and decrypted only inside isolated hardware enclaves. Node operators cannot inspect variables.
+2. **Decentralized price feeds (FTSOv2)**: The enclave queries pricing data directly on-chain from Flare FTSOv2 providers to estimate risk indices without trusting off-chain APIs.
+3. **On-Chain Attestation registries**: Strategist recommendations are registered via `StrategyRegistry.sol` and validated by `ExecutionManager.sol` only when accompanied by signed hardware attestation certificates.
+
+---
+
+## ✦ System Architecture & Data Flow
+
+```
+┌──────────────┐          ┌──────────────────────┐          ┌──────────────────────┐
+│  Vite App    │  ECIES   │     TEE Enclave      │  Sign    │   Flare Blockchain   │
+│  (Browser)   ├─────────►│  (AMD SEV-SNP/SGX)   ├─────────►│ (StrategyRegistry)   │
+│              │  Payload │                      │  Payload │ (ExecutionManager)   │
+└──────────────┘          └──────────┬───────────┘          └──────────────────────┘
+                                     │
+                                     ▼
+                                 FTSOv2 Feeds
+                                 (Real-time price)
+```
+
+1. **Parameters Sealing**: The browser seals reallocation targets before sending.
+2. **TEE Compute**: The enclave decrypts variables, reads FTSOv2 oracle feeds, audits weights, and yields attestation signatures.
+3. **On-Chain Log**: Smart contracts verify the enclave signature and code hash before recording the strategy.
+
+---
+
+## ✦ Monorepo Layout
 
 ```
 ├── apps/
-│   ├── web/                   # Vite React + TypeScript Frontend
-│   └── api/                   # Fastify Backend API
+│   ├── web/                   # Vite React + TypeScript Frontend (Wagmi + Tailwind CSS)
+│   └── api/                   # Fastify Backend TEE gateway API
+│
 ├── packages/
-│   ├── ui/                    # Reusable atomic UI design system components
-│   ├── sdk/                   # Verifiable API, FTSO, and TEE client SDK
-│   ├── contracts/             # Solidity smart contracts (Hardhat + OpenZeppelin)
-│   ├── config/                # Shared TSConfigs, Linting, and tooling settings
-│   └── types/                 # Shared domain model structures and interfaces
-├── docs/
-│   └── adr/                   # Architecture Decision Records (ADRs)
-├── scripts/                   # Utility automation scripts
-├── infra/                     # Orchestration and container files (Docker)
-└── .github/                   # CI/CD Workflows (GitHub Actions)
+│   ├── ui/                    # Reusable atomic and composite UI design components
+│   ├── sdk/                   # Core calculator SDK (FTSO client, risk model, simulator)
+│   ├── contracts/             # Solidity smart contracts compiled via Hardhat
+│   ├── config/                # Shared ESLint config configurations
+│   └── types/                 # Shared domain types and interfaces registry
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## ✦ Tech Stack
 
-- Node.js >= 23.2.0
-- pnpm >= 10.5.2
-- Docker >= 29.4.3
+- **Web**: React, TypeScript (Strict), Tailwind CSS, Framer Motion, Wagmi v2, Viem.
+- **Smart Contracts**: Solidity (0.8.20), Hardhat, Ethers v6, TypeChain.
+- **Processors**: AMD SEV-SNP, Intel SGX (TEE).
+- **Tooling**: pnpm workspaces, ESLint, Prettier, Husky.
 
-### Installation
+---
 
-Install all package dependencies with a single command from the repository root:
+## ✦ Getting Started
+
+### 1. Installation
+
+Install all monorepo dependencies with a single root command:
 
 ```bash
 pnpm install
 ```
 
-### Build Workspace
+### 2. Smart Contract compilation
 
-Compile all workspaces using TypeScript Project References:
+Compile smart contracts and generate updated TypeScript TypeChain bindings:
+
+```bash
+pnpm --filter @aegis/contracts compile
+```
+
+### 3. Compile TypeScript reference targets
+
+Build package workspaces using TypeScript project references:
 
 ```bash
 pnpm build
 ```
 
-### Lint and Format Validation
+### 4. Run Development Servers
 
-Verify lint checks and code styling:
-
-```bash
-pnpm lint
-```
-
-### Local Services (Docker)
-
-Start the local Postgres database and Hardhat mock node services:
+Launch local dev environments (Frontend at `http://localhost:3000`):
 
 ```bash
-docker compose up -d
+pnpm dev
 ```
 
-## Developer Guidelines
+---
 
-- **Code Styling**: Enforced by Prettier and ESLint. Formatting runs automatically on file saves as defined in `.vscode/settings.json`.
-- **Git Commits**: Husky triggers `lint-staged` on pre-commit, ensuring only lint-clean and format-compliant code can be committed.
-- **Architecture Logs**: Check the `docs/adr/` folder for architectural justifications and tooling choices.
+## ✦ Platform Features & Highlights
+
+- **Dynamic Demo Mode**: Bypass wallet setups instantly to inspect reports and triggers under RPC congestion.
+- **AI Decision Passport**: Verifiable hardware audit passport certifying execution integrity.
+- **Evidence Panel**: Detailed scoring parameters transparently detailing rebalancing reasons.

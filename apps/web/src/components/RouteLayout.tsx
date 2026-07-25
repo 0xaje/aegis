@@ -30,8 +30,23 @@ export function RouteLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Demo Mode overrides
+  const [demoMode, setDemoModeState] = React.useState(() => {
+    return typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
+  });
+
+  const toggleDemoMode = () => {
+    const nextMode = !demoMode;
+    localStorage.setItem('aegis_demo_mode', nextMode ? 'true' : 'false');
+    setDemoModeState(nextMode);
+    window.location.reload();
+  };
+
   // Wagmi Web3 Hooks
-  const { address, isConnected, chainId } = useAccount();
+  const { address: realAddress, isConnected: realIsConnected, chainId } = useAccount();
+  const isConnected = realIsConnected || demoMode;
+  const address = demoMode ? '0x9bB516503c000f2B8E1857f30de7bd0709d005fE4' : realAddress;
+
   const { connect, connectors, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChain();
@@ -137,8 +152,13 @@ export function RouteLayout() {
   };
 
   const triggerDisconnect = () => {
-    disconnect();
-    setProfileOpen(false);
+    if (demoMode) {
+      localStorage.setItem('aegis_demo_mode', 'false');
+      window.location.reload();
+    } else {
+      disconnect();
+      setProfileOpen(false);
+    }
   };
 
   return (
@@ -197,9 +217,18 @@ export function RouteLayout() {
             isDarkMode ? 'bg-[#07080c]' : 'bg-white border-slate-200',
           )}
           logo={
-            <div className="flex items-center gap-2 select-none">
-              <Shield className="w-5 h-5 text-indigo-500" />
-              {!sidebarCollapsed && <span className="font-bold text-sm tracking-wider">AEGIS</span>}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 select-none">
+                <Shield className="w-5 h-5 text-indigo-500" />
+                {!sidebarCollapsed && (
+                  <span className="font-bold text-sm tracking-wider">AEGIS</span>
+                )}
+              </div>
+              {demoMode && !sidebarCollapsed && (
+                <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded font-mono w-max">
+                  DEMO MODE ACTIVE
+                </span>
+              )}
             </div>
           }
           navItems={navItems.map((item) => ({
@@ -226,15 +255,28 @@ export function RouteLayout() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="w-full gap-1.5 h-9 justify-center font-semibold"
-                  onClick={() => setConnectModalOpen(true)}
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  {!sidebarCollapsed && <span>Connect Wallet</span>}
-                </Button>
+                <div className="flex flex-col gap-2">
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="w-full gap-1.5 h-9 justify-center font-semibold"
+                    onClick={() => setConnectModalOpen(true)}
+                  >
+                    <LogIn className="w-3.5 h-3.5" />
+                    {!sidebarCollapsed && <span>Connect Wallet</span>}
+                  </Button>
+                  {!sidebarCollapsed && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full gap-1.5 h-9 justify-center font-semibold border-dashed border-indigo-500/40 hover:bg-indigo-500/10 text-indigo-400"
+                      onClick={toggleDemoMode}
+                    >
+                      <Terminal className="w-3.5 h-3.5" />
+                      <span>Demo Mode</span>
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
           }
@@ -396,9 +438,19 @@ export function RouteLayout() {
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <Button variant="primary" size="sm" onClick={() => setConnectModalOpen(true)}>
-                    Connect Wallet
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={toggleDemoMode}
+                      className="border-dashed border-indigo-500/40 hover:bg-indigo-500/10 text-indigo-400 font-semibold"
+                    >
+                      Demo Mode
+                    </Button>
+                    <Button variant="primary" size="sm" onClick={() => setConnectModalOpen(true)}>
+                      Connect Wallet
+                    </Button>
+                  </div>
                 )}
               </div>
             }

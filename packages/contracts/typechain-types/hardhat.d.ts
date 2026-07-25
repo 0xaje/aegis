@@ -22,17 +22,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AegisAnchor__factory>;
     getContractFactory(
-      name: "AegisPortfolioExecutor",
+      name: "ExecutionManager",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.AegisPortfolioExecutor__factory>;
+    ): Promise<Contracts.ExecutionManager__factory>;
     getContractFactory(
-      name: "IFlareContractRegistry",
+      name: "StrategyRegistry",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IFlareContractRegistry__factory>;
-    getContractFactory(
-      name: "IFtsoV2",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IFtsoV2__factory>;
+    ): Promise<Contracts.StrategyRegistry__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -45,20 +41,15 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.AegisAnchor>;
     getContractAt(
-      name: "AegisPortfolioExecutor",
+      name: "ExecutionManager",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.AegisPortfolioExecutor>;
+    ): Promise<Contracts.ExecutionManager>;
     getContractAt(
-      name: "IFlareContractRegistry",
+      name: "StrategyRegistry",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.IFlareContractRegistry>;
-    getContractAt(
-      name: "IFtsoV2",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IFtsoV2>;
+    ): Promise<Contracts.StrategyRegistry>;
 
     deployContract(
       name: "Ownable",
@@ -69,17 +60,13 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.AegisAnchor>;
     deployContract(
-      name: "AegisPortfolioExecutor",
+      name: "ExecutionManager",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AegisPortfolioExecutor>;
+    ): Promise<Contracts.ExecutionManager>;
     deployContract(
-      name: "IFlareContractRegistry",
+      name: "StrategyRegistry",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IFlareContractRegistry>;
-    deployContract(
-      name: "IFtsoV2",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IFtsoV2>;
+    ): Promise<Contracts.StrategyRegistry>;
 
     deployContract(
       name: "Ownable",
@@ -92,20 +79,15 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.AegisAnchor>;
     deployContract(
-      name: "AegisPortfolioExecutor",
+      name: "ExecutionManager",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.AegisPortfolioExecutor>;
+    ): Promise<Contracts.ExecutionManager>;
     deployContract(
-      name: "IFlareContractRegistry",
+      name: "StrategyRegistry",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IFlareContractRegistry>;
-    deployContract(
-      name: "IFtsoV2",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.IFtsoV2>;
+    ): Promise<Contracts.StrategyRegistry>;
 
     // default types
     getContractFactory(

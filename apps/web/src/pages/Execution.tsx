@@ -4,14 +4,18 @@ import { ExecutionStatusCard, Card, CardHeader, CardTitle, CardDescription } fro
 import { Lock } from 'lucide-react';
 
 export default function Execution() {
-  const { isConnected } = useAccount();
-  const [step, setStep] = React.useState<0 | 1 | 2 | 3 | 4>(0);
+  const { isConnected: realIsConnected } = useAccount();
+  const demoMode =
+    typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
+  const isConnected = realIsConnected || demoMode;
+  const [step, setStep] = React.useState<0 | 1 | 2 | 3 | 4 | 5>(0);
 
   const startPipelineDemo = () => {
     setStep(1);
     setTimeout(() => setStep(2), 1500);
     setTimeout(() => setStep(3), 3000);
     setTimeout(() => setStep(4), 4500);
+    setTimeout(() => setStep(5), 6000);
   };
 
   return (

@@ -76,8 +76,8 @@
       ]
     },
     "/home/oyeolorun/project-aegis/packages/contracts/contracts/AegisAnchor.sol": {
-      "lastModificationDate": 1784973623636,
-      "contentHash": "7d43c5302a66fe0f4dfcbbe878bd7953",
+      "lastModificationDate": 1784973753086,
+      "contentHash": "d36d86f587682ffed466589d50ed0cf4",
       "sourceName": "contracts/AegisAnchor.sol",
       "solcConfig": {
         "version": "0.8.20",
@@ -109,6 +109,78 @@
       ],
       "artifacts": [
         "AegisAnchor"
+      ]
+    },
+    "/home/oyeolorun/project-aegis/packages/contracts/contracts/ExecutionManager.sol": {
+      "lastModificationDate": 1784978059866,
+      "contentHash": "cf648bcbab06acb5978de9a9f2ef9466",
+      "sourceName": "contracts/ExecutionManager.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.20"
+      ],
+      "artifacts": [
+        "ExecutionManager"
+      ]
+    },
+    "/home/oyeolorun/project-aegis/packages/contracts/contracts/StrategyRegistry.sol": {
+      "lastModificationDate": 1784978053046,
+      "contentHash": "55bee08d66acc9c1543a23ffe46e7f12",
+      "sourceName": "contracts/StrategyRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.20"
+      ],
+      "artifacts": [
+        "StrategyRegistry"
       ]
     }
   }

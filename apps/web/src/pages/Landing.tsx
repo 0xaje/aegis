@@ -91,7 +91,7 @@ export default function Landing() {
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight max-w-4xl font-sans">
-            Confidential Asset intelligence <br />
+            Confidential Financial Intelligence <br />
             <span className="bg-gradient-to-r from-indigo-400 via-slate-200 to-orange-400 bg-clip-text text-transparent">
               Built on Flare Network
             </span>

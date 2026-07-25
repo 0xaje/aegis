@@ -15,7 +15,10 @@ import {
 import { Lock } from 'lucide-react';
 
 export default function History() {
-  const { isConnected } = useAccount();
+  const { isConnected: realIsConnected } = useAccount();
+  const demoMode =
+    typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
+  const isConnected = realIsConnected || demoMode;
 
   return (
     <div className="flex flex-col gap-6 w-full">
