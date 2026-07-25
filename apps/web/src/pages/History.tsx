@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import {
   Table,
   TableHeader,
@@ -15,7 +15,7 @@ import {
 import { Lock } from 'lucide-react';
 
 export default function History() {
-  const { isConnected } = useOutletContext<{ isConnected: boolean }>();
+  const { isConnected } = useAccount();
 
   return (
     <div className="flex flex-col gap-6 w-full">

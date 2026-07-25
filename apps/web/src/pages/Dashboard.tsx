@@ -1,4 +1,4 @@
-import { useOutletContext } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import {
   MetricCard,
   PortfolioAllocation,
@@ -10,7 +10,7 @@ import {
 import { Lock } from 'lucide-react';
 
 export default function Dashboard() {
-  const { isConnected } = useOutletContext<{ isConnected: boolean }>();
+  const { isConnected } = useAccount();
 
   // Mock static balances
   const mockAssets = [

@@ -1,9 +1,9 @@
-import { useOutletContext } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { RecommendationCard, Card, CardHeader, CardTitle, CardDescription } from '@aegis/ui';
 import { Lock } from 'lucide-react';
 
 export default function IntelligenceReport() {
-  const { isConnected } = useOutletContext<{ isConnected: boolean }>();
+  const { isConnected } = useAccount();
 
   return (
     <div className="flex flex-col gap-6 w-full">

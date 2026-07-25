@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { ExecutionStatusCard, Card, CardHeader, CardTitle, CardDescription } from '@aegis/ui';
 import { Lock } from 'lucide-react';
 
 export default function Execution() {
-  const { isConnected } = useOutletContext<{ isConnected: boolean }>();
+  const { isConnected } = useAccount();
   const [step, setStep] = React.useState<0 | 1 | 2 | 3 | 4>(0);
 
   const startPipelineDemo = () => {
