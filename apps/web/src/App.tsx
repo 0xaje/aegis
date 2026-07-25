@@ -1,36 +1,26 @@
-import { useState } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppLayout } from './components/AppLayout.js';
-import Landing from './pages/Landing.js';
-import Dashboard from './pages/Dashboard.js';
-import Intelligence from './pages/Intelligence.js';
-import Simulation from './pages/Simulation.js';
-import Execution from './pages/Execution.js';
-import History from './pages/History.js';
-import Settings from './pages/Settings.js';
+import { Button } from '@aegis/ui';
 
 function App() {
-  const [isConnected, setIsConnected] = useState(false);
-
   return (
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route
-          path="/app"
-          element={<AppLayout isConnected={isConnected} setIsConnected={setIsConnected} />}
-        >
-          <Route index element={<Navigate to="/app/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="intelligence" element={<Intelligence />} />
-          <Route path="simulation" element={<Simulation />} />
-          <Route path="execution" element={<Execution />} />
-          <Route path="history" element={<History />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </HashRouter>
+    <div className="min-h-screen bg-[#05060a] text-slate-100 flex flex-col items-center justify-center font-sans">
+      <div className="flex flex-col items-center gap-4 text-center max-w-md p-6">
+        <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <span className="font-bold text-lg text-white">A</span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-100">
+          Aegis Project Foundation
+        </h1>
+        <p className="text-xs text-slate-400 leading-relaxed font-sans">
+          Clean repository infrastructure compiles cleanly across workspaces. Ready for feature
+          integrations.
+        </p>
+        <a href="https://github.com/0xaje/aegis" target="_blank" rel="noopener noreferrer">
+          <Button variant="outline" size="sm" className="border-slate-850 text-slate-300">
+            Open Repository
+          </Button>
+        </a>
+      </div>
+    </div>
   );
 }
 

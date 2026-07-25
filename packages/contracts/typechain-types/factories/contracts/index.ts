@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as interfaces from "./interfaces";
+export { AegisAnchor__factory } from "./AegisAnchor__factory";
 export { AegisPortfolioExecutor__factory } from "./AegisPortfolioExecutor__factory";

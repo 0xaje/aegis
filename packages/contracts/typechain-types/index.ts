@@ -8,6 +8,8 @@ export type { contracts };
 export * as factories from "./factories";
 export type { Ownable } from "./@openzeppelin/contracts/access/Ownable";
 export { Ownable__factory } from "./factories/@openzeppelin/contracts/access/Ownable__factory";
+export type { AegisAnchor } from "./contracts/AegisAnchor";
+export { AegisAnchor__factory } from "./factories/contracts/AegisAnchor__factory";
 export type { AegisPortfolioExecutor } from "./contracts/AegisPortfolioExecutor";
 export { AegisPortfolioExecutor__factory } from "./factories/contracts/AegisPortfolioExecutor__factory";
 export type { IFlareContractRegistry } from "./contracts/interfaces/IFlareContractRegistry";

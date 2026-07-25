@@ -18,6 +18,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Ownable__factory>;
     getContractFactory(
+      name: "AegisAnchor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AegisAnchor__factory>;
+    getContractFactory(
       name: "AegisPortfolioExecutor",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AegisPortfolioExecutor__factory>;
@@ -36,6 +40,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Ownable>;
     getContractAt(
+      name: "AegisAnchor",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.AegisAnchor>;
+    getContractAt(
       name: "AegisPortfolioExecutor",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -55,6 +64,10 @@ declare module "hardhat/types/runtime" {
       name: "Ownable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Ownable>;
+    deployContract(
+      name: "AegisAnchor",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AegisAnchor>;
     deployContract(
       name: "AegisPortfolioExecutor",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -73,6 +86,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.Ownable>;
+    deployContract(
+      name: "AegisAnchor",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.AegisAnchor>;
     deployContract(
       name: "AegisPortfolioExecutor",
       args: any[],

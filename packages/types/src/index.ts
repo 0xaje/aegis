@@ -1,2 +1,9 @@
-export * from './portfolio.js';
-export * from './flare.js';
+/**
+ * Aegis Shared Types
+ */
+
+export interface SystemConfig {
+  env: 'development' | 'production' | 'test';
+  version: string;
+  debug: boolean;
+}

@@ -1,118 +1,6 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/home/oyeolorun/project-aegis/packages/contracts/contracts/AegisPortfolioExecutor.sol": {
-      "lastModificationDate": 1784939431322,
-      "contentHash": "6bbd1c61c2af4dae4ba480379210a6ee",
-      "sourceName": "contracts/AegisPortfolioExecutor.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/access/Ownable.sol",
-        "./interfaces/IFlareContractRegistry.sol",
-        "./interfaces/IFtsoV2.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "AegisPortfolioExecutor"
-      ]
-    },
-    "/home/oyeolorun/project-aegis/packages/contracts/contracts/interfaces/IFlareContractRegistry.sol": {
-      "lastModificationDate": 1784939421412,
-      "contentHash": "19902083bac1a846a381957f87fe6fd6",
-      "sourceName": "contracts/interfaces/IFlareContractRegistry.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "IFlareContractRegistry"
-      ]
-    },
-    "/home/oyeolorun/project-aegis/packages/contracts/contracts/interfaces/IFtsoV2.sol": {
-      "lastModificationDate": 1784939425942,
-      "contentHash": "7ee6a444926ba9751e36c3264aa53926",
-      "sourceName": "contracts/interfaces/IFtsoV2.sol",
-      "solcConfig": {
-        "version": "0.8.20",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "evmVersion": "paris",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "IFtsoV2"
-      ]
-    },
     "/home/oyeolorun/project-aegis/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
       "lastModificationDate": 1784939637732,
       "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
@@ -185,6 +73,42 @@
       ],
       "artifacts": [
         "Context"
+      ]
+    },
+    "/home/oyeolorun/project-aegis/packages/contracts/contracts/AegisAnchor.sol": {
+      "lastModificationDate": 1784973623636,
+      "contentHash": "7d43c5302a66fe0f4dfcbbe878bd7953",
+      "sourceName": "contracts/AegisAnchor.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.20"
+      ],
+      "artifacts": [
+        "AegisAnchor"
       ]
     }
   }
