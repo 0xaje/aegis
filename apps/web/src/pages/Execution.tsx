@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useAccount } from 'wagmi';
 import { ExecutionStatusCard, Card, CardHeader, CardTitle, CardDescription } from '@aegis/ui';
-import { Lock } from 'lucide-react';
+import { Lock, ArrowRight } from 'lucide-react';
 
 export default function Execution() {
   const { isConnected: realIsConnected } = useAccount();
@@ -21,7 +21,37 @@ export default function Execution() {
   return (
     <div className="flex flex-col gap-6 w-full">
       {isConnected ? (
-        <div className="w-full animate-in fade-in duration-200">
+        <div className="flex flex-col gap-5 w-full animate-in fade-in duration-200">
+          {/* Flare Narrative Flow Strip */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 select-none">
+            {[
+              {
+                label: 'FTSOv2 Oracle',
+                color: 'text-orange-400 border-orange-500/30 bg-orange-500/5',
+              },
+              {
+                label: 'Confidential Compute (TEE)',
+                color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/5',
+              },
+              {
+                label: 'Verified Recommendation',
+                color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/5',
+              },
+              {
+                label: 'StrategyRegistry',
+                color: 'text-violet-400 border-violet-500/30 bg-violet-500/5',
+              },
+            ].map((s, i, arr) => (
+              <React.Fragment key={s.label}>
+                <span
+                  className={`shrink-0 text-[9px] font-mono font-semibold px-2.5 py-1 rounded-full border ${s.color}`}
+                >
+                  {s.label}
+                </span>
+                {i < arr.length - 1 && <ArrowRight className="w-3 h-3 text-slate-700 shrink-0" />}
+              </React.Fragment>
+            ))}
+          </div>
           <ExecutionStatusCard
             activeStep={step}
             strategyName="FTSO Optimization"

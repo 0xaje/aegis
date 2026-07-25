@@ -87,7 +87,7 @@ export default function Landing() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-semibold text-indigo-400 font-mono tracking-wider uppercase">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            Flare Confidential Compute Sandboxed
+            Powered by FTSOv2 &amp; Flare Confidential Compute
           </div>
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight max-w-4xl font-sans">
@@ -98,8 +98,9 @@ export default function Landing() {
           </h1>
 
           <p className="text-slate-400 text-sm md:text-base leading-relaxed max-w-2xl mt-1">
-            Analyze portfolios, test risk boundaries, and deploy execution swaps inside secure
-            hardware enclaves. Protected calculations backed by on-chain cryptographic attestations.
+            Generate your Confidential Financial Intelligence Report — powered by FTSOv2 oracles and
+            Flare Confidential Compute. Recommendations produced inside hardware-isolated enclaves,
+            verified with on-chain cryptographic attestations.
           </p>
 
           <div className="flex items-center gap-4 mt-4">
@@ -107,9 +108,9 @@ export default function Landing() {
               size="lg"
               variant="primary"
               className="h-11 px-6 text-xs"
-              onClick={() => navigate('/app/dashboard')}
+              onClick={() => navigate('/app/intelligence')}
             >
-              Launch Dashboard
+              Generate Intelligence Report
             </Button>
             <a href="https://github.com/0xaje/aegis" target="_blank" rel="noopener noreferrer">
               <Button
