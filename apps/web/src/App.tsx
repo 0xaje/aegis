@@ -30,8 +30,6 @@ function PageSuspense({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
-  const [isConnected, setIsConnected] = React.useState(false);
-
   return (
     <HashRouter>
       <Routes>
@@ -46,14 +44,11 @@ function App() {
         />
 
         {/* Core Layout containing Sidebar & Header */}
-        <Route
-          path="/app"
-          element={<RouteLayout isConnected={isConnected} setIsConnected={setIsConnected} />}
-        >
+        <Route path="/app" element={<RouteLayout />}>
           <Route index element={<Navigate to="/app/dashboard" replace />} />
 
           {/* Protected Routes Tree */}
-          <Route element={<ProtectedRoute isConnected={isConnected} redirectPath="/" />}>
+          <Route element={<ProtectedRoute redirectPath="/" />}>
             <Route
               path="dashboard"
               element={

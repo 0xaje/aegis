@@ -1,11 +1,13 @@
 import { Navigate, Outlet } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 
 export interface ProtectedRouteProps {
-  isConnected: boolean;
   redirectPath?: string;
 }
 
-export function ProtectedRoute({ isConnected, redirectPath = '/' }: ProtectedRouteProps) {
+export function ProtectedRoute({ redirectPath = '/' }: ProtectedRouteProps) {
+  const { isConnected } = useAccount();
+
   if (!isConnected) {
     return <Navigate to={redirectPath} replace />;
   }
