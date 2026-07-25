@@ -14,3 +14,5 @@ export class AegisSDK {
     return this.endpoint;
   }
 }
+
+export * from './portfolio.js';
