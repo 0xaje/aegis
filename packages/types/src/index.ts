@@ -53,3 +53,23 @@ export interface RiskReport {
   overallHealthScore: number;
   updatedAt: number;
 }
+
+export interface TargetAllocationAdjustment {
+  assetAddress: string;
+  targetAllocationPercentage: number;
+}
+
+export interface PortfolioRecommendation {
+  id: string;
+  title: string;
+  adjustments: TargetAllocationAdjustment[];
+}
+
+export interface SimulationResult {
+  recommendationId: string;
+  projectedAllocation: PortfolioAsset[];
+  projectedTotalValueUSD: number;
+  projectedYieldAPY: number;
+  projectedRisk: RiskReport;
+  projectedHealthScore: number;
+}
