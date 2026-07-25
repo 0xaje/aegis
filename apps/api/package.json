@@ -1,0 +1,30 @@
+{
+  "name": "@aegis/api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for Aegis built on Fastify",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch & nodemon dist/server.js",
+    "build": "prisma generate && tsc --build",
+    "clean": "tsc --build --clean && rimraf dist",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@aegis/sdk": "workspace:*",
+    "@aegis/types": "workspace:*",
+    "@fastify/cors": "^10.0.1",
+    "@prisma/client": "^6.1.0",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.1.0",
+    "typescript": "^5.7.2"
+  }
+}

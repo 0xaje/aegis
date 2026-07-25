@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  address   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Portfolio {
+  id            String   @id @default(uuid())
+  address       String   @unique
+  totalValueUSD Float
+  assets        Asset[]
+  updatedAt     DateTime @updatedAt
+}
+
+model Asset {
+  id          String    @id @default(uuid())
+  portfolioId String
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id], onDelete: Cascade)
+  symbol      String
+  name        String
+  address     String
+  decimals    Int
+  balance     String // Serialized BigInt balance
+  valueUSD    Float
+  priceUSD    Float
+}
+
+model Strategy {
+  id            String   @id @default(uuid())
+  name          String
+  riskTolerance String   // LOW, MEDIUM, HIGH
+  description   String
+  allocation    Json     // Array of { symbol: string, percentage: number }
+  createdAt     DateTime @default(now())
+}
+
+model Recommendation {
+  id            String   @id @default(uuid())
+  portfolioAddr String
+  strategyId    String
+  rationale     String
+  simulatedReturn Float
+  confidenceScore Float
+  verified      Boolean
+  signature     String?
+  timestamp     DateTime @default(now())
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@aegis/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart contracts for Aegis platform built on Flare",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "clean": "hardhat clean && rimraf cache artifacts typechain-types"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.17",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}
