@@ -16,3 +16,4 @@ export class AegisSDK {
 }
 
 export * from './portfolio.js';
+export * from './ftso.js';
