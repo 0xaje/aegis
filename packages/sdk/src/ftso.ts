@@ -124,30 +124,16 @@ export class FlareFtsoClient {
     } catch (err) {
       console.error(`Failed to query FTSOv2 price feed for ${normalizedSymbol}:`, err);
 
-      // 3. Fallback: Return expired cached value
+      // Return cached value if available
       if (cached) {
-        console.warn(`Returning expired cache pricing for ${normalizedSymbol} as fallback.`);
+        console.warn(`Returning cached pricing for ${normalizedSymbol}.`);
         return cached.data;
       }
 
-      // Default backup values if query fails and no cache exists
-      const fallbackPrices: Record<string, number> = {
-        BTC: 98000.0,
-        ETH: 3300.0,
-        FLR: 0.03,
-        FXRP: 1.15,
-      };
-
-      const priceUSD = fallbackPrices[normalizedSymbol] ?? 1.0;
-      console.warn(`Returning defaults fallback pricing for ${normalizedSymbol}: $${priceUSD}`);
-
-      return {
-        symbol: normalizedSymbol,
-        value: BigInt(Math.floor(priceUSD * 1e8)),
-        decimals: 8,
-        timestamp: BigInt(Math.floor(Date.now() / 1000)),
-        priceUSD,
-      };
+      // Throw explicit error rather than silently fabricating mock fallback prices
+      throw new Error(
+        `FTSOv2 price feed for ${normalizedSymbol} is unavailable: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
   }
 

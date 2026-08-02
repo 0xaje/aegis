@@ -7,7 +7,6 @@ import { Spinner } from '@aegis/ui';
 const Landing = React.lazy(() => import('./pages/Landing.js'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard.js'));
 const IntelligenceReport = React.lazy(() => import('./pages/IntelligenceReport.js'));
-const Simulation = React.lazy(() => import('./pages/Simulation.js'));
 const Execution = React.lazy(() => import('./pages/Execution.js'));
 const History = React.lazy(() => import('./pages/History.js'));
 const Settings = React.lazy(() => import('./pages/Settings.js'));
@@ -59,14 +58,6 @@ function App() {
             element={
               <PageSuspense>
                 <IntelligenceReport />
-              </PageSuspense>
-            }
-          />
-          <Route
-            path="simulation"
-            element={
-              <PageSuspense>
-                <Simulation />
               </PageSuspense>
             }
           />

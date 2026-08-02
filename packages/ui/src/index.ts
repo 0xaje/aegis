@@ -13,6 +13,6 @@ export * from './components/HealthScore.js';
 export * from './components/DecisionPassport.js';
 export * from './components/PortfolioAllocation.js';
 export * from './components/RecommendationCard.js';
-export * from './components/SimulationCard.js';
 export * from './components/ExecutionStatusCard.js';
+export * from './components/EnclaveInspector.js';
 export * from './components/Layouts.js';

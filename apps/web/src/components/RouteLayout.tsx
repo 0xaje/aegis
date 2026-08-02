@@ -4,7 +4,6 @@ import { Sidebar, Header, Button, cn } from '@aegis/ui';
 import {
   LayoutDashboard,
   BrainCircuit,
-  Play,
   Shield,
   History,
   Settings,
@@ -13,12 +12,9 @@ import {
   LogOut,
   Bell,
   Search,
-  Sun,
-  Moon,
   ChevronDown,
   User,
   Copy,
-  Terminal,
   AlertTriangle,
   X,
 } from 'lucide-react';
@@ -30,23 +26,8 @@ export function RouteLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Demo Mode overrides
-  const [demoMode, setDemoModeState] = React.useState(() => {
-    return typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
-  });
-
-  const toggleDemoMode = () => {
-    const nextMode = !demoMode;
-    localStorage.setItem('aegis_demo_mode', nextMode ? 'true' : 'false');
-    setDemoModeState(nextMode);
-    window.location.reload();
-  };
-
   // Wagmi Web3 Hooks
-  const { address: realAddress, isConnected: realIsConnected, chainId } = useAccount();
-  const isConnected = realIsConnected || demoMode;
-  const address = demoMode ? '0x9bB516503c000f2B8E1857f30de7bd0709d005fE4' : realAddress;
-
+  const { address, isConnected, chainId } = useAccount();
   const { connect, connectors, error: connectError } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain } = useSwitchChain();
@@ -57,7 +38,6 @@ export function RouteLayout() {
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [connectModalOpen, setConnectModalOpen] = React.useState(false);
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const isWrongNetwork = isConnected && chainId !== flareTestnet.id;
@@ -84,41 +64,35 @@ export function RouteLayout() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Navigation Items
+  // Navigation Items aligned with 4-stage narrative
   const navItems = [
     {
-      label: 'Dashboard',
-      icon: <LayoutDashboard className="w-4 h-4" />,
+      label: 'Executive Overview',
+      icon: <LayoutDashboard className="w-4 h-4 text-cyan-400" />,
       active: location.pathname === '/app/dashboard',
       onClick: () => navigate('/app/dashboard'),
     },
     {
-      label: 'Intelligence Report',
-      icon: <BrainCircuit className="w-4 h-4" />,
+      label: 'Confidential Intelligence',
+      icon: <BrainCircuit className="w-4 h-4 text-cyan-400" />,
       active: location.pathname === '/app/intelligence',
       onClick: () => navigate('/app/intelligence'),
     },
     {
-      label: 'Simulation',
-      icon: <Play className="w-4 h-4" />,
-      active: location.pathname === '/app/simulation',
-      onClick: () => navigate('/app/simulation'),
-    },
-    {
-      label: 'Execution',
-      icon: <Shield className="w-4 h-4" />,
+      label: 'On-Chain Execution',
+      icon: <Shield className="w-4 h-4 text-cyan-400" />,
       active: location.pathname === '/app/execution',
       onClick: () => navigate('/app/execution'),
     },
     {
-      label: 'Attestation History',
-      icon: <History className="w-4 h-4" />,
+      label: 'Decision Passports',
+      icon: <History className="w-4 h-4 text-cyan-400" />,
       active: location.pathname === '/app/history',
       onClick: () => navigate('/app/history'),
     },
     {
-      label: 'Settings',
-      icon: <Settings className="w-4 h-4" />,
+      label: 'Platform Settings',
+      icon: <Settings className="w-4 h-4 text-cyan-400" />,
       active: location.pathname === '/app/settings',
       onClick: () => navigate('/app/settings'),
     },
@@ -128,13 +102,12 @@ export function RouteLayout() {
   const commandOptions = [
     { label: 'Go to Dashboard', action: () => navigate('/app/dashboard') },
     { label: 'Go to Intelligence Report', action: () => navigate('/app/intelligence') },
-    { label: 'Go to Simulation', action: () => navigate('/app/simulation') },
-    { label: 'Go to Execution', action: () => navigate('/app/execution') },
-    { label: 'Go to Attestation History', action: () => navigate('/app/history') },
+    { label: 'Go to Execution Pipeline', action: () => navigate('/app/execution') },
+    { label: 'Go to Attestation Log', action: () => navigate('/app/history') },
     { label: 'Go to Settings', action: () => navigate('/app/settings') },
     {
       label: isConnected ? 'Disconnect Wallet' : 'Connect Wallet',
-      action: () => (isConnected ? disconnect() : setConnectModalOpen(true)),
+      action: () => (isConnected ? triggerDisconnect() : setConnectModalOpen(true)),
     },
   ];
 
@@ -147,38 +120,27 @@ export function RouteLayout() {
   const handleCopyAddress = () => {
     if (address) {
       navigator.clipboard.writeText(address);
-      alert('Wallet address copied to clipboard');
     }
   };
 
   const triggerDisconnect = () => {
-    if (demoMode) {
-      localStorage.setItem('aegis_demo_mode', 'false');
-      window.location.reload();
-    } else {
-      disconnect();
-      setProfileOpen(false);
-    }
+    disconnect();
+    setProfileOpen(false);
   };
 
   return (
-    <div
-      className={cn(
-        'min-h-screen flex flex-col font-sans transition-colors duration-250',
-        isDarkMode ? 'bg-[#05060a] text-slate-100' : 'bg-slate-50 text-slate-900',
-      )}
-    >
+    <div className="dark min-h-screen flex flex-col font-sans bg-[#030712] text-slate-100 selection:bg-cyan-500 selection:text-slate-950 bg-cyber-grid">
       {/* 1. Wrong Network Warning Banner */}
       {isWrongNetwork && (
-        <div className="w-full bg-rose-950/30 border-b border-rose-900/40 py-2.5 px-6 animate-in slide-in-from-top duration-200">
+        <div className="w-full bg-rose-500/20 border-b border-rose-500/40 py-2.5 px-6 animate-in slide-in-from-top duration-200">
           <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-mono">
-            <div className="flex items-center gap-2 text-rose-455 text-rose-400">
-              <AlertTriangle className="w-3.5 h-3.5" />
-              <span>Wrong network detected. Aegis calculations require Flare Coston2.</span>
+            <div className="flex items-center gap-2 text-rose-400">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Wrong network detected. Aegis calculations require Flare Coston2 Testnet.</span>
             </div>
             <Button
               size="sm"
-              className="bg-rose-900/80 hover:bg-rose-900 hover:text-white border-none h-7 px-3 py-1 font-semibold text-[10px]"
+              className="bg-rose-500 hover:bg-rose-600 text-white border-none h-7 px-3 py-1 font-semibold text-[11px] cursor-pointer"
               onClick={() => switchChain({ chainId: flareTestnet.id })}
             >
               Switch to Flare Coston2
@@ -188,22 +150,19 @@ export function RouteLayout() {
       )}
 
       {/* Top Banner Status Bar */}
-      <div
-        className={cn(
-          'w-full border-b py-2.5 px-6 select-none',
-          isDarkMode ? 'bg-indigo-950/20 border-slate-800/40' : 'bg-indigo-50/40 border-slate-200',
-        )}
-      >
+      <div className="w-full bg-slate-950/90 backdrop-blur-xl border-b border-white/10 py-2 px-6 select-none shadow-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-2 text-indigo-455 text-indigo-400">
+          <div className="flex items-center gap-2 text-cyan-400">
             <Cpu className="w-3.5 h-3.5 animate-pulse" />
-            <span>Enclave TEE Node active: coston2-node-0x1a</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4 text-slate-400">
-            <span>
-              Attestation check: <span className="text-emerald-500 font-semibold">PASSED</span>
+            <span className="font-semibold tracking-wide">
+              Enclave TEE Gateway: Coston2 Secure Node
             </span>
-            <span className="border-l border-slate-800 pl-4">Sig: 0xae63...7124</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-6 text-slate-400">
+            <span>
+              Network:{' '}
+              <span className="text-emerald-400 font-bold">Flare Coston2 (Chain ID 114)</span>
+            </span>
           </div>
         </div>
       </div>
@@ -212,23 +171,24 @@ export function RouteLayout() {
         {/* Sidebar */}
         <Sidebar
           className={cn(
-            'hidden md:flex shrink-0 transition-all duration-300',
+            'hidden md:flex shrink-0 transition-all duration-300 border-r border-white/10 bg-slate-950/90 backdrop-blur-2xl shadow-xl',
             sidebarCollapsed ? 'w-20' : 'w-64',
-            isDarkMode ? 'bg-[#07080c]' : 'bg-white border-slate-200',
           )}
           logo={
             <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 select-none">
-                <Shield className="w-5 h-5 text-indigo-500" />
+              <div
+                onClick={() => navigate('/')}
+                className="flex items-center gap-3 cursor-pointer select-none"
+              >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-cyan-500/25">
+                  <Shield className="w-5 h-5" />
+                </div>
                 {!sidebarCollapsed && (
-                  <span className="font-bold text-sm tracking-wider">AEGIS</span>
+                  <span className="font-display text-xl font-extrabold tracking-tight text-white">
+                    Aegis
+                  </span>
                 )}
               </div>
-              {demoMode && !sidebarCollapsed && (
-                <span className="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded font-mono w-max">
-                  DEMO MODE ACTIVE
-                </span>
-              )}
             </div>
           }
           navItems={navItems.map((item) => ({
@@ -236,46 +196,35 @@ export function RouteLayout() {
             label: sidebarCollapsed ? '' : item.label,
           }))}
           footer={
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               {isConnected ? (
                 <>
                   {!sidebarCollapsed && (
-                    <div className="bg-[#0c0e14] p-3 rounded-lg border border-slate-900 font-mono text-[9px] text-slate-500 truncate">
+                    <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/10 font-mono text-xs text-slate-300 truncate">
                       {address}
                     </div>
                   )}
                   <Button
                     variant="destructive"
                     size="sm"
-                    className="w-full gap-1.5 h-9 justify-center font-semibold"
+                    className="w-full gap-2 h-9 justify-center font-semibold bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30"
                     onClick={triggerDisconnect}
                   >
                     <LogOut className="w-3.5 h-3.5" />
-                    {!sidebarCollapsed && <span>Disconnect</span>}
+                    {!sidebarCollapsed && <span>Disconnect Wallet</span>}
                   </Button>
                 </>
               ) : (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                   <Button
                     variant="primary"
                     size="sm"
-                    className="w-full gap-1.5 h-9 justify-center font-semibold"
+                    className="w-full gap-2 h-9 justify-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
                     onClick={() => setConnectModalOpen(true)}
                   >
                     <LogIn className="w-3.5 h-3.5" />
                     {!sidebarCollapsed && <span>Connect Wallet</span>}
                   </Button>
-                  {!sidebarCollapsed && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full gap-1.5 h-9 justify-center font-semibold border-dashed border-indigo-500/40 hover:bg-indigo-500/10 text-indigo-400"
-                      onClick={toggleDemoMode}
-                    >
-                      <Terminal className="w-3.5 h-3.5" />
-                      <span>Demo Mode</span>
-                    </Button>
-                  )}
                 </div>
               )}
             </div>
@@ -285,24 +234,32 @@ export function RouteLayout() {
         {/* Content panel viewports */}
         <div className="flex-1 flex flex-col min-w-0 relative">
           <Header
-            title={location.pathname === '/app/dashboard' ? 'Dashboard Overview' : 'Aegis Platform'}
-            subtitle="Confidential Financial Intelligence built on Flare"
-            className={isDarkMode ? 'bg-[#07080c]/30' : 'bg-white border-slate-200'}
+            title={
+              location.pathname === '/app/dashboard'
+                ? 'Institutional Dashboard'
+                : location.pathname === '/app/intelligence'
+                  ? 'Confidential Financial Intelligence'
+                  : location.pathname === '/app/simulation'
+                    ? 'Zero-Knowledge Strategy Simulator'
+                    : location.pathname === '/app/execution'
+                      ? 'Confidential Execution Pipeline'
+                      : location.pathname === '/app/history'
+                        ? 'Attestation History Log'
+                        : 'Platform Settings'
+            }
+            subtitle="Confidential Compute powered by Flare TEE Infrastructure"
+            className="bg-surface/70 border-b border-outline-variant/10 backdrop-blur-xl"
             actions={
-              <div className="flex items-center gap-4 relative">
+              <div className="flex items-center gap-md relative">
                 {/* Search / Command triggers */}
                 <button
                   onClick={() => setCommandPaletteOpen(true)}
-                  className={cn(
-                    'hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs border outline-none font-sans',
-                    isDarkMode
-                      ? 'border-slate-800 bg-[#0c0e14]/60 text-slate-400 hover:text-slate-200'
-                      : 'border-slate-200 bg-slate-100 text-slate-650 hover:bg-slate-200 text-slate-600',
-                  )}
+                  aria-label="Quick command search (Shortcut: Command K)"
+                  className="hidden sm:flex items-center gap-sm px-md py-xs rounded-full bg-surface-container border border-outline-variant/20 text-body-sm text-on-surface-variant hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-primary outline-none transition-colors cursor-pointer"
                 >
-                  <Search className="w-3.5 h-3.5" />
-                  <span>Search...</span>
-                  <kbd className="font-mono text-[9px] px-1 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-500 leading-none">
+                  <Search className="w-3.5 h-3.5 text-primary" />
+                  <span>Search commands...</span>
+                  <kbd className="font-mono-data text-[10px] px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/30 text-on-surface-variant">
                     ⌘K
                   </kbd>
                 </button>
@@ -311,10 +268,12 @@ export function RouteLayout() {
                 <div className="relative">
                   <button
                     onClick={() => setNotificationsOpen((prev) => !prev)}
-                    className="p-2 rounded-lg hover:bg-slate-900/40 relative outline-none focus:outline-none"
+                    aria-label="View system status and notifications"
+                    aria-expanded={notificationsOpen}
+                    aria-haspopup="true"
+                    className="p-2 rounded-full hover:bg-surface-bright/50 text-on-surface-variant relative focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer"
                   >
-                    <Bell className="w-4.5 h-4.5 text-slate-400 hover:text-slate-200" />
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500" />
+                    <Bell className="w-5 h-5" />
                   </button>
 
                   {/* Notifications Dropdown Panel */}
@@ -324,36 +283,29 @@ export function RouteLayout() {
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className={cn(
-                          'absolute right-0 mt-2 w-72 rounded-lg border p-1 shadow-lg z-30 flex flex-col gap-1',
-                          isDarkMode
-                            ? 'bg-[#0c0e14] border-slate-800 text-slate-200'
-                            : 'bg-white border-slate-200 text-slate-900',
-                        )}
+                        role="region"
+                        aria-label="Notifications panel"
+                        className="absolute right-0 mt-2 w-80 rounded-xl glass-card border border-outline-variant/20 p-sm shadow-2xl z-30 flex flex-col gap-xs"
                       >
-                        <div className="px-3 py-2 text-[10px] font-mono text-slate-500 uppercase border-b border-slate-900/30">
-                          System Alerts
+                        <div className="px-md py-xs text-label-caps uppercase text-primary border-b border-outline-variant/10 flex justify-between items-center">
+                          <span>System Status</span>
                         </div>
-                        <div className="flex flex-col max-h-60 overflow-y-auto text-[11px] leading-normal font-sans">
+                        <div
+                          className="flex flex-col max-h-60 overflow-y-auto text-body-sm"
+                          role="status"
+                          aria-live="polite"
+                        >
                           {connectError && (
-                            <div className="p-3 bg-rose-950/20 border-b border-rose-900/30 text-rose-400 font-mono text-[10px]">
+                            <div className="p-md bg-error-container/20 border-b border-error/20 text-error font-mono-data text-xs">
                               Connection Error: {connectError.message}
                             </div>
                           )}
-                          <div className="p-3 hover:bg-slate-900/25 border-b border-slate-900/30">
-                            <span className="font-semibold text-slate-200 block">
-                              Attestation Verified
+                          <div className="p-md hover:bg-surface-bright/40 border-b border-outline-variant/10 rounded-lg">
+                            <span className="font-semibold text-on-surface block">
+                              Flare Coston2 RPC
                             </span>
-                            <span className="text-slate-500 text-[10px] block mt-0.5">
-                              Enclave coston2-node-0x1a is active (1 min ago)
-                            </span>
-                          </div>
-                          <div className="p-3 hover:bg-slate-900/25 border-b border-slate-900/30">
-                            <span className="font-semibold text-slate-200 block">
-                              FTSOv2 Price updated
-                            </span>
-                            <span className="text-slate-500 text-[10px] block mt-0.5">
-                              WFLR/USD checked bounds (5 mins ago)
+                            <span className="text-on-surface-variant text-body-sm block mt-xs">
+                              Connected to official Flare Coston2 RPC node.
                             </span>
                           </div>
                         </div>
@@ -362,33 +314,21 @@ export function RouteLayout() {
                   </AnimatePresence>
                 </div>
 
-                {/* Dark-mode indicator switcher */}
-                <button
-                  onClick={() => setIsDarkMode((prev) => !prev)}
-                  className="p-2 rounded-lg hover:bg-slate-900/40 outline-none focus:outline-none"
-                >
-                  {isDarkMode ? (
-                    <Sun className="w-4.5 h-4.5 text-slate-400 hover:text-yellow-400" />
-                  ) : (
-                    <Moon className="w-4.5 h-4.5 text-slate-650 hover:text-slate-900" />
-                  )}
-                </button>
-
                 {/* Profile wallet dropdown */}
                 {isConnected ? (
                   <div className="relative">
                     <button
                       onClick={() => setProfileOpen((prev) => !prev)}
-                      className={cn(
-                        'flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs outline-none focus:outline-none',
-                        isDarkMode
-                          ? 'border-slate-800 hover:bg-slate-900/40 text-slate-350'
-                          : 'border-slate-200 hover:bg-slate-100 text-slate-700',
-                      )}
+                      aria-label="User account wallet profile menu"
+                      aria-expanded={profileOpen}
+                      aria-haspopup="true"
+                      className="flex items-center gap-xs px-md py-xs rounded-full bg-surface-container border border-outline-variant/20 text-body-sm hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-primary outline-none transition-colors cursor-pointer"
                     >
-                      <User className="w-3.5 h-3.5 text-indigo-400" />
-                      <span className="font-mono hidden sm:inline">{formattedAddress}</span>
-                      <ChevronDown className="w-3.5 h-3.5" />
+                      <User className="w-4 h-4 text-primary" />
+                      <span className="font-mono-data hidden sm:inline text-on-surface">
+                        {formattedAddress}
+                      </span>
+                      <ChevronDown className="w-3.5 h-3.5 text-on-surface-variant" />
                     </button>
 
                     {/* Profile Dropdown Panel */}
@@ -398,174 +338,163 @@ export function RouteLayout() {
                           initial={{ opacity: 0, y: 10, scale: 0.95 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                          className={cn(
-                            'absolute right-0 mt-2 w-56 rounded-lg border p-1 shadow-lg z-30 flex flex-col gap-1',
-                            isDarkMode
-                              ? 'bg-[#0c0e14] border-slate-800 text-slate-200'
-                              : 'bg-white border-slate-200 text-slate-900',
-                          )}
+                          className="absolute right-0 mt-2 w-64 rounded-xl glass-card border border-outline-variant/20 p-md shadow-2xl z-30 flex flex-col gap-md"
                         >
-                          <div className="px-3 py-2 flex flex-col gap-1.5 border-b border-slate-900/30">
-                            <span className="text-[10px] text-slate-500 font-mono tracking-wider uppercase font-semibold">
-                              User Address
+                          <div className="flex flex-col gap-xs">
+                            <span className="text-label-caps uppercase text-on-surface-variant">
+                              Connected Wallet
                             </span>
-                            <div className="flex items-center justify-between gap-2 bg-[#05060a] p-1.5 rounded border border-slate-900 font-mono text-[9px] text-slate-400 leading-none">
-                              <span className="truncate max-w-[120px]">{address}</span>
-                              <button onClick={handleCopyAddress} className="hover:text-white">
-                                <Copy className="w-3 h-3" />
-                              </button>
+                            <div className="font-mono-data text-body-sm text-primary truncate bg-surface-container p-xs rounded border border-outline-variant/20">
+                              {address}
                             </div>
                           </div>
-                          <div className="flex flex-col text-xs">
-                            <button
-                              className="w-full text-left px-3 py-2 hover:bg-slate-900/25 text-slate-300 hover:text-white"
-                              onClick={() => {
-                                navigate('/app/settings');
-                                setProfileOpen(false);
-                              }}
+                          <div className="flex flex-col gap-xs">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full justify-between h-8 border-outline-variant/30 text-on-surface hover:bg-surface-bright/50"
+                              onClick={handleCopyAddress}
                             >
-                              Settings Panel
-                            </button>
-                            <button
-                              className="w-full text-left px-3 py-2 hover:bg-slate-900/25 text-rose-400 hover:text-rose-350 font-semibold"
+                              <span>Copy Address</span>
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              className="w-full justify-between h-8 bg-error-container/30 text-error hover:bg-error-container/50 border border-error/20"
                               onClick={triggerDisconnect}
                             >
-                              Disconnect Session
-                            </button>
+                              <span>Disconnect</span>
+                              <LogOut className="w-3.5 h-3.5" />
+                            </Button>
                           </div>
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={toggleDemoMode}
-                      className="border-dashed border-indigo-500/40 hover:bg-indigo-500/10 text-indigo-400 font-semibold"
-                    >
-                      Demo Mode
-                    </Button>
-                    <Button variant="primary" size="sm" onClick={() => setConnectModalOpen(true)}>
-                      Connect Wallet
-                    </Button>
-                  </div>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    className="gap-xs h-8 px-md font-semibold bg-primary text-on-primary hover:brightness-110 shadow-md shadow-primary/20"
+                    onClick={() => setConnectModalOpen(true)}
+                  >
+                    <LogIn className="w-3.5 h-3.5" />
+                    <span>Connect</span>
+                  </Button>
                 )}
               </div>
             }
           />
 
-          {/* Child pages views */}
-          <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-7xl w-full mx-auto flex flex-col gap-6">
+          {/* Router Content Container */}
+          <main className="flex-1 p-lg max-w-container-max w-full mx-auto">
             <Outlet />
           </main>
         </div>
       </div>
 
-      {/* 2. Command Palette Overlay Modal */}
+      {/* Command Palette Modal */}
       <AnimatePresence>
         {commandPaletteOpen && (
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-start justify-center pt-20 px-lg"
+            onClick={() => setCommandPaletteOpen(false)}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setCommandPaletteOpen(false)}
-              className="fixed inset-0 bg-[#05060a]/75 backdrop-blur-[3px]"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.97, y: -10 }}
-              transition={{ duration: 0.15 }}
-              className="bg-[#0c0e14] border border-slate-800 w-full max-w-lg rounded-xl overflow-hidden shadow-2xl z-10 flex flex-col border-glow"
+              initial={{ scale: 0.95, y: -10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: -10 }}
+              className="w-full max-w-xl glass-card rounded-xl border border-outline-variant/30 overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center gap-3 px-4 border-b border-slate-900/60 py-3.5">
-                <Search className="w-4 h-4 text-slate-500 shrink-0" />
+              <div className="flex items-center px-lg py-md border-b border-outline-variant/10">
+                <Search className="w-5 h-5 text-primary mr-md" />
                 <input
                   type="text"
+                  placeholder="Type a command or navigate page..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Type a command or lookup view..."
-                  className="bg-transparent border-none outline-none text-xs text-slate-200 placeholder-slate-500 w-full font-sans"
+                  className="bg-transparent border-none outline-none text-body-md text-on-surface w-full placeholder:text-on-surface-variant/50 font-sans"
                   autoFocus
                 />
+                <button
+                  onClick={() => setCommandPaletteOpen(false)}
+                  className="p-xs text-on-surface-variant hover:text-on-surface rounded-full"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
 
-              <div className="p-2 max-h-72 overflow-y-auto flex flex-col gap-0.5">
-                <div className="px-2 py-1.5 text-[9px] font-mono text-slate-500 uppercase tracking-widest leading-none font-bold">
-                  Navigation & Tools
-                </div>
+              <div className="max-h-72 overflow-y-auto p-sm flex flex-col gap-xs">
                 {filteredCommands.length > 0 ? (
-                  filteredCommands.map((opt, idx) => (
+                  filteredCommands.map((cmd, idx) => (
                     <button
                       key={idx}
                       onClick={() => {
-                        opt.action();
+                        cmd.action();
                         setCommandPaletteOpen(false);
                       }}
-                      className="w-full text-left px-3 py-2 text-xs text-slate-350 hover:text-white hover:bg-indigo-600/10 hover:text-indigo-400 rounded-lg flex items-center justify-between group outline-none border border-transparent"
+                      className="w-full text-left px-md py-sm rounded-lg hover:bg-surface-bright/50 text-body-sm text-on-surface flex items-center justify-between transition-colors cursor-pointer"
                     >
-                      <span className="font-semibold">{opt.label}</span>
-                      <Terminal className="w-3.5 h-3.5 text-slate-600 group-hover:text-indigo-400 shrink-0" />
+                      <span>{cmd.label}</span>
+                      <span className="material-symbols-outlined text-primary text-sm">
+                        arrow_forward
+                      </span>
                     </button>
                   ))
                 ) : (
-                  <div className="px-3 py-6 text-center text-xs text-slate-500 font-sans">
+                  <div className="p-lg text-center text-on-surface-variant font-body-sm">
                     No matching commands found.
                   </div>
                 )}
               </div>
-
-              <div className="bg-[#07080c]/50 px-4 py-2 border-t border-slate-900/60 text-[9px] font-mono text-slate-500 flex items-center justify-between select-none">
-                <span>Use keyboard shortcut options or click to execute</span>
-                <span>ESC to close</span>
-              </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 3. Connect Wallet Select Dialogue Modal */}
+      {/* Connect Wallet Modal */}
       <AnimatePresence>
         {connectModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-center justify-center p-lg"
+            onClick={() => setConnectModalOpen(false)}
+          >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setConnectModalOpen(false)}
-              className="fixed inset-0 bg-[#05060a]/75 backdrop-blur-[3px]"
-            />
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.2 }}
-              className="bg-[#0c0e14] border border-slate-800 w-full max-w-sm rounded-xl overflow-hidden shadow-2xl z-10 flex flex-col border-glow p-6 gap-6 relative"
+              initial={{ scale: 0.95, y: 10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 10 }}
+              className="w-full max-w-md glass-card rounded-2xl border border-outline-variant/30 p-xl shadow-2xl flex flex-col gap-lg"
+              onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setConnectModalOpen(false)}
-                className="absolute top-4 right-4 p-1 rounded-lg hover:bg-slate-900/40 outline-none focus:outline-none"
-              >
-                <X className="w-4 h-4 text-slate-400" />
-              </button>
-
-              <div className="flex flex-col gap-1 select-none">
-                <span className="text-[10px] text-slate-550 text-indigo-400 font-mono tracking-wider uppercase font-semibold">
-                  Select Provider Protocol
-                </span>
-                <h3 className="text-base font-bold text-slate-100">Connect to Aegis Platform</h3>
-                <p className="text-xs text-slate-450 text-slate-400 leading-relaxed mt-1">
-                  Authenticate your credentials using supported injected or WalletConnect client
-                  connectors on Flare Coston2.
-                </p>
+              <div className="flex items-center justify-between border-b border-outline-variant/10 pb-md">
+                <div className="flex items-center gap-md">
+                  <div className="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+                    <Shield className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-headline-md text-title-sm text-on-surface">
+                      Connect Web3 Wallet
+                    </h3>
+                    <p className="text-body-sm text-on-surface-variant">Flare Coston2 Testnet</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setConnectModalOpen(false)}
+                  className="p-xs text-on-surface-variant hover:text-on-surface rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-md">
                 {connectors.map((connector) => (
                   <button
                     key={connector.uid}
@@ -573,23 +502,17 @@ export function RouteLayout() {
                       connect({ connector });
                       setConnectModalOpen(false);
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 bg-[#05060a] border border-slate-850 hover:border-indigo-500/40 rounded-xl text-xs text-slate-200 font-semibold transition-all hover:bg-indigo-950/10 group outline-none"
+                    className="w-full p-md rounded-xl bg-surface-container border border-outline-variant/20 hover:border-primary/50 hover:bg-surface-bright/50 flex items-center justify-between text-body-sm text-on-surface transition-all cursor-pointer"
                   >
-                    <span>{connector.name}</span>
-                    <span className="text-[10px] text-slate-550 group-hover:text-indigo-400 font-mono">
-                      Connect →
+                    <span className="font-semibold">{connector.name}</span>
+                    <span className="material-symbols-outlined text-primary">
+                      account_balance_wallet
                     </span>
                   </button>
                 ))}
               </div>
-
-              {connectError && (
-                <div className="bg-rose-955/10 border border-rose-900/30 rounded-lg p-3 text-[10px] font-mono text-rose-350 leading-normal">
-                  Error linking: {connectError.message}
-                </div>
-              )}
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

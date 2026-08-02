@@ -9,7 +9,7 @@ export function Card({ className, children }: CardProps) {
   return (
     <div
       className={cn(
-        'border border-slate-800/80 bg-gradient-to-b from-[#0c0e14]/90 to-[#07080c]/90 text-slate-100 rounded-xl overflow-hidden shadow-xl border-glow flex flex-col',
+        'glass-card rounded-2xl border border-white/10 text-slate-100 overflow-hidden shadow-2xl flex flex-col',
         className,
       )}
     >
@@ -19,14 +19,14 @@ export function Card({ className, children }: CardProps) {
 }
 
 export function CardHeader({ className, children }: CardProps) {
-  return <div className={cn('p-5 pb-3 flex flex-col gap-1', className)}>{children}</div>;
+  return <div className={cn('p-6 pb-3 flex flex-col gap-1.5', className)}>{children}</div>;
 }
 
 export function CardTitle({ className, children }: CardProps) {
   return (
     <h3
       className={cn(
-        'font-sans font-bold text-sm text-slate-100 leading-none tracking-tight',
+        'font-display font-bold text-lg md:text-xl text-white leading-snug tracking-tight',
         className,
       )}
     >
@@ -37,7 +37,7 @@ export function CardTitle({ className, children }: CardProps) {
 
 export function CardDescription({ className, children }: CardProps) {
   return (
-    <p className={cn('text-xs text-slate-400 font-sans leading-relaxed mt-0.5', className)}>
+    <p className={cn('text-sm text-slate-400 font-sans leading-relaxed mt-0.5', className)}>
       {children}
     </p>
   );
@@ -45,7 +45,7 @@ export function CardDescription({ className, children }: CardProps) {
 
 export function CardContent({ className, children }: CardProps) {
   return (
-    <div className={cn('p-5 pt-3 text-xs leading-relaxed text-slate-300 font-sans', className)}>
+    <div className={cn('p-6 pt-3 text-sm leading-relaxed text-slate-200 font-sans', className)}>
       {children}
     </div>
   );
@@ -55,7 +55,7 @@ export function CardFooter({ className, children }: CardProps) {
   return (
     <div
       className={cn(
-        'px-5 py-4 bg-[#07080c]/50 border-t border-slate-900/60 mt-auto flex items-center justify-between gap-3 text-xs',
+        'px-6 py-4 bg-slate-950/40 border-t border-white/5 mt-auto flex items-center justify-between gap-4 text-sm font-sans',
         className,
       )}
     >

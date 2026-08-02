@@ -1,75 +1,331 @@
 import * as React from 'react';
-import { useAccount } from 'wagmi';
-import { ExecutionStatusCard, Card, CardHeader, CardTitle, CardDescription } from '@aegis/ui';
-import { Lock, ArrowRight } from 'lucide-react';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { motion } from 'framer-motion';
 
 export default function Execution() {
-  const { isConnected: realIsConnected } = useAccount();
-  const demoMode =
-    typeof window !== 'undefined' && localStorage.getItem('aegis_demo_mode') === 'true';
-  const isConnected = realIsConnected || demoMode;
-  const [step, setStep] = React.useState<0 | 1 | 2 | 3 | 4 | 5>(0);
+  const { isConnected } = useAccount();
 
-  const startPipelineDemo = () => {
-    setStep(1);
-    setTimeout(() => setStep(2), 1500);
-    setTimeout(() => setStep(3), 3000);
-    setTimeout(() => setStep(4), 4500);
-    setTimeout(() => setStep(5), 6000);
+  // Real Wagmi contract transaction hooks
+  const {
+    writeContract,
+    data: txHash,
+    isPending: isWalletPending,
+    error: writeError,
+    reset: resetWrite,
+  } = useWriteContract();
+
+  const {
+    isLoading: isTxConfirming,
+    isSuccess: isTxSuccess,
+    error: receiptError,
+  } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
+
+  // Calculate active step index (0 = Step 1: Wallet Approval, 1 = Step 2: Network Broadcast, 2 = Step 3: Finality)
+  const activeStep = React.useMemo(() => {
+    if (isTxSuccess) return 2; // Step 3: Complete
+    if (txHash && isTxConfirming) return 1; // Step 2: Mining
+    if (isWalletPending) return 0; // Step 1: Wallet signature
+    return 0; // Default Step 1
+  }, [isWalletPending, txHash, isTxConfirming, isTxSuccess]);
+
+  const handleExecute = () => {
+    resetWrite();
+    writeContract({
+      address: '0x1D8F7CA53789d4BBa65a9530de7bd0709d005fE4',
+      abi: [
+        {
+          type: 'function',
+          name: 'deposit',
+          inputs: [],
+          outputs: [],
+          stateMutability: 'payable',
+        },
+      ],
+      functionName: 'deposit',
+      value: 0n,
+    });
   };
 
+  const steps = [
+    {
+      id: 1,
+      title: 'Wallet Signature Authorization',
+      action: 'Requesting cryptographic signature from connected Web3 wallet.',
+      why: 'Verifies private key ownership and authorizes the execution payload on Flare Coston2.',
+      duration: '~5–15 seconds (waiting for user wallet confirmation)',
+      getStatus: () => {
+        if (writeError) return { label: 'Signature Rejected', state: 'ERROR' };
+        if (isWalletPending) return { label: 'Awaiting Signature...', state: 'ACTIVE' };
+        if (txHash) return { label: 'Signature Confirmed', state: 'COMPLETE' };
+        return { label: 'Ready for Authorization', state: 'IDLE' };
+      },
+    },
+    {
+      id: 2,
+      title: 'On-Chain Network Dispatch & Execution',
+      action: 'Broadcasting payload to Flare Coston2 RPC nodes and execution registry.',
+      why: 'Submits strategy transaction to StrategyRegistry contract (0x1D8F7CA53789d4BBa65a9530de7bd0709d005fE4).',
+      duration: '~1–3 seconds (Flare Coston2 fast block times)',
+      getStatus: () => {
+        if (receiptError) return { label: 'Execution Failed', state: 'ERROR' };
+        if (txHash && isTxConfirming) return { label: 'Broadcasting & Mining...', state: 'ACTIVE' };
+        if (isTxSuccess) return { label: 'Mined in Block', state: 'COMPLETE' };
+        return { label: 'Awaiting Step 1', state: 'IDLE' };
+      },
+    },
+    {
+      id: 3,
+      title: 'Block Finality & Decision Passport Anchor',
+      action: 'Verifying block finality and generating immutable on-chain record.',
+      why: 'Anchors the cryptographic execution attestation on Flare Coston2 Testnet with verifiable transaction receipt.',
+      duration: 'Sub-second finality',
+      getStatus: () => {
+        if (isTxSuccess) return { label: 'Attestation Anchored On-Chain', state: 'COMPLETE' };
+        return { label: 'Awaiting Confirmation', state: 'IDLE' };
+      },
+    },
+  ];
+
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-xl w-full max-w-4xl mx-auto py-md">
+      {/* Page Title */}
+      <div className="flex flex-col gap-xs border-b border-outline-variant/10 pb-md">
+        <span className="text-label-caps uppercase text-primary font-mono-data tracking-widest">
+          Transparent Transaction Pipeline
+        </span>
+        <h1 className="font-display text-3xl md:text-4xl font-extrabold text-on-surface">
+          Confidential Strategy Execution
+        </h1>
+        <p className="text-body-sm text-on-surface-variant">
+          Real-time status tracking for smart contract transactions on Flare Coston2 Testnet.
+        </p>
+      </div>
+
       {isConnected ? (
-        <div className="flex flex-col gap-5 w-full animate-in fade-in duration-200">
-          {/* Flare Narrative Flow Strip */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 select-none">
-            {[
-              {
-                label: 'FTSOv2 Oracle',
-                color: 'text-orange-400 border-orange-500/30 bg-orange-500/5',
-              },
-              {
-                label: 'Confidential Compute (TEE)',
-                color: 'text-indigo-400 border-indigo-500/30 bg-indigo-500/5',
-              },
-              {
-                label: 'Verified Recommendation',
-                color: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/5',
-              },
-              {
-                label: 'StrategyRegistry',
-                color: 'text-violet-400 border-violet-500/30 bg-violet-500/5',
-              },
-            ].map((s, i, arr) => (
-              <React.Fragment key={s.label}>
-                <span
-                  className={`shrink-0 text-[9px] font-mono font-semibold px-2.5 py-1 rounded-full border ${s.color}`}
-                >
-                  {s.label}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col gap-xl w-full"
+        >
+          {/* Main Action Trigger Header Card */}
+          <div className="glass-card rounded-2xl p-xl border-l-4 border-l-primary flex flex-col md:flex-row items-center justify-between gap-lg bg-surface-container">
+            <div className="space-y-xs">
+              <span className="text-label-caps uppercase text-tertiary font-mono-data tracking-widest">
+                Target Contract
+              </span>
+              <h3 className="font-headline-md text-headline-md text-on-surface">
+                StrategyRegistry.sol
+              </h3>
+              <p className="text-body-sm text-on-surface-variant font-mono-data truncate max-w-md">
+                0x1D8F7CA53789d4BBa65a9530de7bd0709d005fE4
+              </p>
+            </div>
+            <button
+              onClick={handleExecute}
+              disabled={isWalletPending || isTxConfirming}
+              className={`px-xl py-md rounded-lg font-title-sm text-body-sm transition-all cursor-pointer shadow-lg w-full md:w-auto ${
+                isWalletPending || isTxConfirming
+                  ? 'bg-surface-container-high text-on-surface-variant cursor-not-allowed border border-outline-variant/20'
+                  : 'bg-primary text-on-primary hover:brightness-110 active:scale-95 shadow-primary/20'
+              }`}
+            >
+              {isWalletPending
+                ? 'Confirming Signature in Wallet...'
+                : isTxConfirming
+                  ? 'Broadcasting Transaction...'
+                  : 'Initiate Strategy Execution'}
+            </button>
+          </div>
+
+          {/* Error Banner */}
+          {(writeError || receiptError) && (
+            <div className="glass-card rounded-xl p-lg bg-error-container/20 border border-error/30 flex flex-col gap-sm text-error">
+              <div className="flex items-center gap-sm">
+                <span className="material-symbols-outlined">error</span>
+                <h4 className="font-bold text-body-md">Transaction Execution Stopped</h4>
+              </div>
+              <p className="text-body-sm font-mono-data">
+                {writeError?.message ||
+                  receiptError?.message ||
+                  'Transaction was rejected or failed on-chain.'}
+              </p>
+              <button
+                onClick={handleExecute}
+                className="w-fit px-lg py-xs rounded-lg bg-error text-on-error font-semibold text-body-sm mt-xs hover:brightness-110 cursor-pointer"
+              >
+                Retry Execution
+              </button>
+            </div>
+          )}
+
+          {/* Success Banner */}
+          {isTxSuccess && txHash && (
+            <div className="glass-card rounded-2xl p-xl bg-tertiary-container/20 border border-tertiary/40 flex flex-col gap-md">
+              <div className="flex items-center gap-md text-tertiary">
+                <span className="material-symbols-outlined text-[32px]">check_circle</span>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface">
+                    Execution Confirmed On-Chain!
+                  </h3>
+                  <p className="text-body-sm text-on-surface-variant">
+                    Transaction successfully mined on Flare Coston2 Testnet.
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-md rounded-xl bg-surface-container border border-outline-variant/20 font-mono-data text-body-sm flex flex-col gap-xs">
+                <span className="text-label-caps text-on-surface-variant uppercase">
+                  Transaction Hash
                 </span>
-                {i < arr.length - 1 && <ArrowRight className="w-3 h-3 text-slate-700 shrink-0" />}
-              </React.Fragment>
-            ))}
+                <a
+                  href={`https://coston2-explorer.flare.network/tx/${txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-bold text-primary hover:underline break-all flex items-center gap-xs"
+                >
+                  <span>{txHash}</span>
+                  <span className="material-symbols-outlined text-sm">open_in_new</span>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* Step-by-Step Single-Active Pipeline Cards */}
+          <div className="flex flex-col gap-md">
+            {steps.map((step, idx) => {
+              const statusInfo = step.getStatus();
+              const isActive = activeStep === idx && !isTxSuccess;
+              const isDone = isTxSuccess || (idx === 0 && txHash);
+
+              return (
+                <div
+                  key={step.id}
+                  className={`glass-card rounded-xl transition-all duration-300 overflow-hidden border ${
+                    isActive
+                      ? 'border-primary shadow-xl ring-1 ring-primary/30 bg-surface-container'
+                      : isDone
+                        ? 'border-tertiary/40 bg-surface-container-low'
+                        : 'border-outline-variant/20 bg-surface-container-lowest opacity-75'
+                  }`}
+                >
+                  <div className="p-lg flex flex-col gap-md">
+                    {/* Header Row */}
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-md">
+                        <div
+                          className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-body-sm font-mono-data border ${
+                            isDone
+                              ? 'bg-tertiary-container/30 text-tertiary border-tertiary/40'
+                              : isActive
+                                ? 'bg-primary-container text-on-primary-container border-primary/40'
+                                : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
+                          }`}
+                        >
+                          {isDone ? '✓' : step.id}
+                        </div>
+                        <div>
+                          <h4 className="font-headline-md text-title-sm text-on-surface font-semibold">
+                            {step.title}
+                          </h4>
+                          <span className="text-body-sm text-on-surface-variant font-mono-data text-[12px]">
+                            {step.duration}
+                          </span>
+                        </div>
+                      </div>
+
+                      <span
+                        className={`px-md py-xs rounded-full font-mono-data text-label-caps uppercase border ${
+                          statusInfo.state === 'COMPLETE'
+                            ? 'bg-tertiary-container/20 text-tertiary border-tertiary/30'
+                            : statusInfo.state === 'ACTIVE'
+                              ? 'bg-primary-container/20 text-primary border-primary/30 animate-pulse'
+                              : statusInfo.state === 'ERROR'
+                                ? 'bg-error-container/20 text-error border-error/30'
+                                : 'bg-surface-container text-on-surface-variant border-outline-variant/20'
+                        }`}
+                      >
+                        {statusInfo.label}
+                      </span>
+                    </div>
+
+                    {/* Single Active Step Expanded Explanations */}
+                    {(isActive || isDone) && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        transition={{ duration: 0.3 }}
+                        className="pt-md border-t border-outline-variant/10 grid grid-cols-1 md:grid-cols-2 gap-md text-body-sm font-sans"
+                      >
+                        <div className="p-md rounded-lg bg-surface-container-low border border-outline-variant/10 space-y-xs">
+                          <span className="font-bold text-primary block text-label-caps uppercase font-mono-data">
+                            Current Action
+                          </span>
+                          <p className="text-on-surface-variant">{step.action}</p>
+                        </div>
+                        <div className="p-md rounded-lg bg-surface-container-low border border-outline-variant/10 space-y-xs">
+                          <span className="font-bold text-tertiary block text-label-caps uppercase font-mono-data">
+                            Why It Matters
+                          </span>
+                          <p className="text-on-surface-variant">{step.why}</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <ExecutionStatusCard
-            activeStep={step}
-            strategyName="FTSO Optimization"
-            onStartExecution={startPipelineDemo}
-          />
-        </div>
+        </motion.div>
       ) : (
-        <Card className="border-glow p-8 text-center flex flex-col items-center gap-4 bg-[#0c0e14]/50 border-dashed">
-          <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
-            <Lock className="w-5 h-5 text-indigo-400" />
+        /* Guidance-Driven Empty State: No Active Execution */
+        <div className="glass-card rounded-2xl p-xl text-center flex flex-col items-center gap-lg max-w-xl mx-auto my-xl border-l-4 border-l-primary">
+          <div className="w-16 h-16 rounded-2xl bg-primary-container/20 border border-primary/30 flex items-center justify-center text-primary">
+            <span className="material-symbols-outlined text-[36px]">play_circle</span>
           </div>
-          <CardHeader className="p-0 flex flex-col gap-0.5">
-            <CardTitle>Execution Pipeline Locked</CardTitle>
-            <CardDescription className="max-w-xs mx-auto">
-              Please authenticate your wallet to initiate transaction rebalances.
-            </CardDescription>
-          </CardHeader>
-        </Card>
+          <div className="space-y-xs">
+            <span className="text-label-caps uppercase text-primary font-mono-data tracking-widest">
+              No Active Execution
+            </span>
+            <h2 className="font-headline-md text-headline-md text-on-surface">
+              Connect Wallet to Execute On-Chain Strategy
+            </h2>
+          </div>
+          <div className="p-md rounded-xl bg-surface-container-low border border-outline-variant/10 text-body-sm text-on-surface-variant space-y-sm text-left font-sans">
+            <div>
+              <strong className="text-on-surface block font-mono-data text-label-caps uppercase text-primary">
+                Why is this screen empty?
+              </strong>
+              <span>
+                The strategy execution pipeline requires an authorized Web3 wallet connection to
+                sign and broadcast transaction payloads targeting StrategyRegistry.sol on Flare
+                Coston2 Testnet.
+              </span>
+            </div>
+            <div>
+              <strong className="text-on-surface block font-mono-data text-label-caps uppercase text-tertiary">
+                What should you do next?
+              </strong>
+              <span>
+                Connect your Web3 wallet to submit execution transactions with real-time on-chain
+                confirmation tracking.
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              const connectBtn = document.querySelector(
+                'header button:last-child',
+              ) as HTMLButtonElement;
+              if (connectBtn) connectBtn.click();
+            }}
+            className="w-full bg-primary text-on-primary font-title-sm text-body-sm py-md rounded-xl hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20 cursor-pointer font-semibold"
+          >
+            Connect Wallet to Execute Strategy
+          </button>
+        </div>
       )}
     </div>
   );

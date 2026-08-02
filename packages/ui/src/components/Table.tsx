@@ -15,7 +15,7 @@ export function TableHeader({
   return (
     <thead
       className={cn(
-        'border-b border-slate-800/80 bg-slate-900/10 text-[10px] font-mono tracking-widest text-slate-500 uppercase select-none',
+        'border-b border-white/10 bg-slate-900/60 text-xs font-mono tracking-wider text-slate-400 uppercase select-none backdrop-blur-md',
         className,
       )}
       {...props}
@@ -24,19 +24,27 @@ export function TableHeader({
 }
 
 export function TableBody({ className, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <tbody className={cn('divide-y divide-slate-850', className)} {...props} />;
+  return <tbody className={cn('divide-y divide-white/5', className)} {...props} />;
 }
 
 export function TableRow({ className, ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
   return (
-    <tr className={cn('hover:bg-slate-900/30 transition-colors group', className)} {...props} />
+    <tr
+      className={cn('hover:bg-slate-800/40 transition-all duration-150 group', className)}
+      {...props}
+    />
   );
 }
 
 export function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
-  return <th className={cn('py-4 px-6 font-semibold font-mono', className)} {...props} />;
+  return (
+    <th
+      className={cn('py-3.5 px-6 font-semibold font-mono text-slate-300', className)}
+      {...props}
+    />
+  );
 }
 
 export function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cn('py-4 px-6 text-slate-300 font-sans', className)} {...props} />;
+  return <td className={cn('py-4 px-6 text-slate-200 font-sans text-sm', className)} {...props} />;
 }
