@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Shield } from 'lucide-react';
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function Landing() {
             className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-transform"
           >
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow-lg shadow-cyan-500/25">
-              🛡️
+              <Shield className="w-4 h-4 text-white" />
             </div>
             <span className="font-display text-xl font-extrabold tracking-tight text-white">
               Aegis

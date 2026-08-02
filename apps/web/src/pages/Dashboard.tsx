@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FlareFtsoClient, calculateRiskReport, aggregatePortfolio } from '@aegis/sdk';
 import { formatUnits } from 'viem';
+import { Check } from 'lucide-react';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -220,19 +221,20 @@ export default function Dashboard() {
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-xs text-body-sm text-on-surface-variant">
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Diversification improves
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Diversification improves
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Volatility decreases
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Volatility decreases
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Expected yield increases
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Expected yield increases
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Within your risk policy
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Within your risk policy
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium sm:col-span-2">
-                  <span className="font-bold">✓</span> Based on current FTSOv2 market data
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Based on current FTSOv2 market
+                  data
                 </div>
               </div>
             </div>

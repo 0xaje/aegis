@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FlareFtsoClient, calculateRiskReport, aggregatePortfolio } from '@aegis/sdk';
 import { EnclaveInspector } from '@aegis/ui';
+import { Check } from 'lucide-react';
 
 export default function IntelligenceReport() {
   const navigate = useNavigate();
@@ -281,19 +282,20 @@ export default function IntelligenceReport() {
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-xs text-body-sm text-on-surface-variant font-sans">
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Diversification improves
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Diversification improves
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Volatility decreases
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Volatility decreases
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Expected yield increases
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Expected yield increases
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium">
-                  <span className="font-bold">✓</span> Within your risk policy
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Within your risk policy
                 </div>
                 <div className="flex items-center gap-xs text-tertiary font-medium sm:col-span-2">
-                  <span className="font-bold">✓</span> Based on current FTSOv2 market data
+                  <Check className="w-3.5 h-3.5 text-cyan-400" /> Based on current FTSOv2 market
+                  data
                 </div>
               </div>
             </div>
@@ -461,12 +463,12 @@ export default function IntelligenceReport() {
                 </div>
                 {teeAttestation && (
                   <div className="text-[11px] text-tertiary font-mono-data mt-xs truncate">
-                    PCR0 Hash: {teeAttestation.measurement ?? '0x7f8a9b...'}
+                    PCR0 Hash: {String(teeAttestation.measurement ?? '0x7f8a9b...')}
                   </div>
                 )}
                 {teeStatus === 'OFFLINE' && (
                   <div className="text-[11px] text-on-surface-variant font-mono-data mt-xs bg-surface-container/50 p-xs rounded border border-outline-variant/20">
-                    💡 <strong className="text-primary font-sans">Local Setup Note:</strong> Run{' '}
+                    <strong className="text-primary font-sans">Local Setup Note:</strong> Run{' '}
                     <code className="text-tertiary font-bold font-mono-data">
                       pnpm --filter @aegis/api dev
                     </code>{' '}

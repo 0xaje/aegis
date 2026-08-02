@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card.js';
 import { Button } from './Button.js';
-import { Send, CheckCircle2, Lock, Key } from 'lucide-react';
+import { Send, CheckCircle2, Lock, Key, Check } from 'lucide-react';
 import { cn } from '../utils.js';
 
 export interface ExecutionStatusCardProps {
@@ -82,7 +82,7 @@ export function ExecutionStatusCard({
                   activeStep > 1 && 'border-emerald-500 text-emerald-400 bg-emerald-950/20',
                 )}
               >
-                {activeStep > 1 ? '✔' : '1'}
+                {activeStep > 1 ? <Check className="w-3.5 h-3.5" /> : '1'}
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-slate-300">
@@ -103,7 +103,7 @@ export function ExecutionStatusCard({
                   activeStep > 2 && 'border-emerald-500 text-emerald-400 bg-emerald-950/20',
                 )}
               >
-                {activeStep > 2 ? '✔' : '2'}
+                {activeStep > 2 ? <Check className="w-3.5 h-3.5" /> : '2'}
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-slate-300">
@@ -126,7 +126,7 @@ export function ExecutionStatusCard({
                   activeStep > 3 && 'border-emerald-500 text-emerald-400 bg-emerald-950/20',
                 )}
               >
-                {activeStep > 3 ? '✔' : '3'}
+                {activeStep > 3 ? <Check className="w-3.5 h-3.5" /> : '3'}
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-slate-300">
@@ -149,7 +149,7 @@ export function ExecutionStatusCard({
                   activeStep > 4 && 'border-emerald-500 text-emerald-400 bg-emerald-950/20',
                 )}
               >
-                {activeStep > 4 ? '✔' : '4'}
+                {activeStep > 4 ? <Check className="w-3.5 h-3.5" /> : '4'}
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-semibold text-slate-300">

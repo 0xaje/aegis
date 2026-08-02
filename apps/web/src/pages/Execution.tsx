@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { motion } from 'framer-motion';
+import { Check } from 'lucide-react';
 
 export default function Execution() {
   const { isConnected } = useAccount();
@@ -224,7 +225,7 @@ export default function Execution() {
                                 : 'bg-surface-container-high text-on-surface-variant border-outline-variant/30'
                           }`}
                         >
-                          {isDone ? '✓' : step.id}
+                          {isDone ? <Check className="w-3.5 h-3.5" /> : step.id}
                         </div>
                         <div>
                           <h4 className="font-headline-md text-title-sm text-on-surface font-semibold">

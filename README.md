@@ -4,7 +4,7 @@ Aegis is a secure, institutional-grade portfolio rebalancing and risk estimation
 
 ---
 
-## ✦ The Problem
+## The Problem
 
 In standard DeFi:
 
@@ -12,7 +12,7 @@ In standard DeFi:
 - **Oracle Vulnerability**: Standard tracking platforms query pricing from centralized APIs, exposing liquidations to gateway manipulation.
 - **Execution Verification Gaps**: Automated swaps cannot guarantee that the underlying asset logic aligns with audited code.
 
-## ✦ The Solution (Flare Confidential Compute)
+## The Solution (Flare Confidential Compute)
 
 Aegis implements a secure cryptographic workflow utilizing:
 
@@ -22,7 +22,7 @@ Aegis implements a secure cryptographic workflow utilizing:
 
 ---
 
-## ✦ System Architecture & Data Flow
+## System Architecture & Data Flow
 
 ```
 ┌──────────────┐          ┌──────────────────────┐          ┌──────────────────────┐
@@ -42,7 +42,7 @@ Aegis implements a secure cryptographic workflow utilizing:
 
 ---
 
-## ✦ Monorepo Layout
+## Monorepo Layout
 
 ```
 ├── apps/
@@ -59,7 +59,7 @@ Aegis implements a secure cryptographic workflow utilizing:
 
 ---
 
-## ✦ Tech Stack
+## Tech Stack
 
 - **Web**: React, TypeScript (Strict), Tailwind CSS, Framer Motion, Wagmi v2, Viem.
 - **Smart Contracts**: Solidity (0.8.20), Hardhat, Ethers v6, TypeChain.
@@ -68,7 +68,7 @@ Aegis implements a secure cryptographic workflow utilizing:
 
 ---
 
-## ✦ Getting Started
+## Getting Started
 
 ### 1. Installation
 
@@ -104,7 +104,7 @@ pnpm dev
 
 ---
 
-## ✦ Platform Features & Highlights
+## Platform Features & Highlights
 
 - **Dynamic Demo Mode**: Bypass wallet setups instantly to inspect reports and triggers under RPC congestion.
 - **AI Decision Passport**: Verifiable hardware audit passport certifying execution integrity.

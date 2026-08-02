@@ -8,9 +8,9 @@ async function start() {
       port: env.PORT,
       host: env.HOST,
     });
-    server.log.info(`🚀 Aegis API Server successfully listening on ${address}`);
+    server.log.info(`Aegis API Server successfully listening on ${address}`);
   } catch (err) {
-    console.error('❌ Critical error during API server boot:', err);
+    console.error('Critical error during API server boot:', err);
     process.exit(1);
   }
 }
