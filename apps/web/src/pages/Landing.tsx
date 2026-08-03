@@ -69,11 +69,11 @@ export default function Landing() {
                 Secure On-Chain Intelligence
               </span>
             </div>
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold leading-[1.1] tracking-tight mb-6 max-w-4xl mx-auto text-white">
+            <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-extrabold leading-[1.15] tracking-tight mb-5 max-w-3xl mx-auto text-white">
               Confidential{' '}
               <span className="text-gradient-primary text-glow">Financial Intelligence</span>
             </h1>
-            <p className="font-sans text-base sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            <p className="font-sans text-sm sm:text-lg text-slate-300 max-w-xl mx-auto mb-8 leading-relaxed font-normal">
               Analyze, simulate, and execute on-chain strategies with the unparalleled security of
               Flare Confidential Compute. Protect your alpha in the dark.
             </p>

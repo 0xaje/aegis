@@ -56,16 +56,14 @@ export function Header({ className, title, subtitle, actions }: HeaderProps) {
   return (
     <header
       className={cn(
-        'w-full border-b border-slate-800/80 py-4 px-6 flex items-center justify-between gap-4 bg-[#07080c]/30 backdrop-blur-sm select-none',
+        'w-full border-b border-slate-800/80 py-3.5 px-6 flex items-center justify-between gap-4 bg-[#07080c]/30 backdrop-blur-sm select-none',
         className,
       )}
     >
       <div className="flex flex-col gap-0.5">
-        <h2 className="text-base font-bold text-slate-105 text-slate-100 tracking-tight leading-none">
-          {title}
-        </h2>
+        <h2 className="text-sm font-bold text-slate-100 tracking-tight leading-snug">{title}</h2>
         {subtitle && (
-          <p className="text-[10px] text-slate-500 font-sans leading-none mt-1">{subtitle}</p>
+          <p className="text-[11px] text-slate-400 font-sans leading-tight">{subtitle}</p>
         )}
       </div>
 
