@@ -128,7 +128,7 @@ export default function IntelligenceReport() {
             <span className="material-symbols-outlined text-sm">gavel</span>
             <span>Investment Committee Briefing</span>
           </div>
-          <h1 className="font-display text-3xl md:text-4xl font-extrabold text-on-surface">
+          <h1 className="font-display text-xl md:text-2xl font-bold text-on-surface tracking-tight">
             Confidential Financial Intelligence Report
           </h1>
           <p className="text-body-sm text-on-surface-variant">

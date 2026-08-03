@@ -179,7 +179,7 @@ export function RouteLayout() {
               location.pathname === '/app/dashboard'
                 ? 'Institutional Dashboard'
                 : location.pathname === '/app/intelligence'
-                  ? 'Confidential Financial Intelligence'
+                  ? 'Financial Intelligence Report'
                   : location.pathname === '/app/simulation'
                     ? 'Zero-Knowledge Strategy Simulator'
                     : location.pathname === '/app/execution'
