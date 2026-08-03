@@ -6,7 +6,6 @@ import { Shield } from 'lucide-react';
 export default function Landing() {
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const faqItems = [
     {
@@ -45,16 +44,6 @@ export default function Landing() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center px-4 py-1.5 bg-slate-900/90 rounded-full border border-white/10 focus-within:border-cyan-500/50 transition-colors backdrop-blur-md">
-            <span className="material-symbols-outlined text-slate-400 text-[18px]">search</span>
-            <input
-              className="bg-transparent border-none focus:outline-none text-xs w-36 ml-2 text-slate-200 placeholder:text-slate-500"
-              placeholder="Search strategies..."
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
           <button
             onClick={() => navigate('/app/dashboard')}
             className="bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110 active:scale-95 transition-all cursor-pointer border border-cyan-400/30"
