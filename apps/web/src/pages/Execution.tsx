@@ -92,16 +92,19 @@ export default function Execution() {
   return (
     <div className="flex flex-col gap-xl w-full max-w-4xl mx-auto py-md">
       {/* Page Title */}
-      <div className="flex flex-col gap-xs border-b border-outline-variant/10 pb-md">
-        <span className="text-label-caps uppercase text-primary font-mono-data tracking-widest">
-          Transparent Transaction Pipeline
-        </span>
-        <h1 className="font-display text-3xl md:text-4xl font-extrabold text-on-surface">
-          Confidential Strategy Execution
-        </h1>
-        <p className="text-body-sm text-on-surface-variant">
-          Real-time status tracking for smart contract transactions on Flare Coston2 Testnet.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-md border-b border-white/10 pb-md">
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 font-mono text-[11px] uppercase tracking-wider mb-2 backdrop-blur-md">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(0,240,255,0.8)]" />
+            <span>Transparent Transaction Pipeline</span>
+          </div>
+          <h1 className="font-display text-xl md:text-2xl font-bold text-white tracking-tight">
+            Confidential Strategy Execution
+          </h1>
+          <p className="text-xs text-slate-400 font-sans mt-1">
+            Real-time status tracking for smart contract transactions on Flare Coston2 Testnet.
+          </p>
+        </div>
       </div>
 
       {isConnected ? (
@@ -112,25 +115,28 @@ export default function Execution() {
           className="flex flex-col gap-xl w-full"
         >
           {/* Main Action Trigger Header Card */}
-          <div className="glass-card rounded-2xl p-xl border-l-4 border-l-primary flex flex-col md:flex-row items-center justify-between gap-lg bg-surface-container">
-            <div className="space-y-xs">
-              <span className="text-label-caps uppercase text-tertiary font-mono-data tracking-widest">
-                Target Contract
-              </span>
-              <h3 className="font-headline-md text-headline-md text-on-surface">
-                StrategyRegistry.sol
-              </h3>
-              <p className="text-body-sm text-on-surface-variant font-mono-data truncate max-w-md">
+          <div className="glass-card rounded-xl p-lg border-l-4 border-l-cyan-400 bg-slate-900/80 flex flex-col md:flex-row items-center justify-between gap-md border border-white/10 shadow-xl">
+            <div className="space-y-1.5 w-full md:w-auto">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  Target Contract
+                </span>
+                <span className="text-[11px] font-mono text-slate-400">
+                  Flare Coston2 (Chain ID 114)
+                </span>
+              </div>
+              <h3 className="font-display text-lg font-bold text-white">StrategyRegistry.sol</h3>
+              <p className="text-xs text-slate-400 font-mono truncate max-w-md bg-slate-950/60 p-2 rounded-lg border border-white/5">
                 0x1D8F7CA53789d4BBa65a9530de7bd0709d005fE4
               </p>
             </div>
             <button
               onClick={handleExecute}
               disabled={isWalletPending || isTxConfirming}
-              className={`px-xl py-md rounded-lg font-title-sm text-body-sm transition-all cursor-pointer shadow-lg w-full md:w-auto ${
+              className={`px-6 py-3 rounded-xl font-sans font-bold text-xs transition-all cursor-pointer shadow-lg w-full md:w-auto shrink-0 ${
                 isWalletPending || isTxConfirming
-                  ? 'bg-surface-container-high text-on-surface-variant cursor-not-allowed border border-outline-variant/20'
-                  : 'bg-primary text-on-primary hover:brightness-110 active:scale-95 shadow-primary/20'
+                  ? 'bg-slate-800 text-slate-400 cursor-not-allowed border border-white/10'
+                  : 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white hover:brightness-110 active:scale-[0.98] shadow-cyan-500/20 border border-cyan-400/30'
               }`}
             >
               {isWalletPending
