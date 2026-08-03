@@ -11,7 +11,6 @@ import {
   LogIn,
   LogOut,
   Bell,
-  Search,
   ChevronDown,
   User,
   Copy,
@@ -34,27 +33,20 @@ export function RouteLayout() {
 
   // Layout States
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
-  const [commandPaletteOpen, setCommandPaletteOpen] = React.useState(false);
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [connectModalOpen, setConnectModalOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState('');
 
   const isWrongNetwork = isConnected && chainId !== flareTestnet.id;
 
   // Keyboard Shortcuts Event Listener
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setCommandPaletteOpen((prev) => !prev);
-      }
       if ((e.metaKey || e.ctrlKey) && e.key === 'b') {
         e.preventDefault();
         setSidebarCollapsed((prev) => !prev);
       }
       if (e.key === 'Escape') {
-        setCommandPaletteOpen(false);
         setNotificationsOpen(false);
         setProfileOpen(false);
         setConnectModalOpen(false);
@@ -97,23 +89,6 @@ export function RouteLayout() {
       onClick: () => navigate('/app/settings'),
     },
   ];
-
-  // Command Palette Options
-  const commandOptions = [
-    { label: 'Go to Dashboard', action: () => navigate('/app/dashboard') },
-    { label: 'Go to Intelligence Report', action: () => navigate('/app/intelligence') },
-    { label: 'Go to Execution Pipeline', action: () => navigate('/app/execution') },
-    { label: 'Go to Attestation Log', action: () => navigate('/app/history') },
-    { label: 'Go to Settings', action: () => navigate('/app/settings') },
-    {
-      label: isConnected ? 'Disconnect Wallet' : 'Connect Wallet',
-      action: () => (isConnected ? triggerDisconnect() : setConnectModalOpen(true)),
-    },
-  ];
-
-  const filteredCommands = commandOptions.filter((opt) =>
-    opt.label.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
   const formattedAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '';
 
@@ -195,40 +170,6 @@ export function RouteLayout() {
             ...item,
             label: sidebarCollapsed ? '' : item.label,
           }))}
-          footer={
-            <div className="flex flex-col gap-2">
-              {isConnected ? (
-                <>
-                  {!sidebarCollapsed && (
-                    <div className="bg-slate-900/90 p-2.5 rounded-xl border border-white/10 font-mono text-xs text-slate-300 truncate">
-                      {address}
-                    </div>
-                  )}
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="w-full gap-2 h-9 justify-center font-semibold bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30"
-                    onClick={triggerDisconnect}
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    {!sidebarCollapsed && <span>Disconnect Wallet</span>}
-                  </Button>
-                </>
-              ) : (
-                <div className="flex flex-col gap-1">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    className="w-full gap-2 h-9 justify-center font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
-                    onClick={() => setConnectModalOpen(true)}
-                  >
-                    <LogIn className="w-3.5 h-3.5" />
-                    {!sidebarCollapsed && <span>Connect Wallet</span>}
-                  </Button>
-                </div>
-              )}
-            </div>
-          }
         />
 
         {/* Content panel viewports */}
@@ -251,19 +192,6 @@ export function RouteLayout() {
             className="bg-surface/70 border-b border-outline-variant/10 backdrop-blur-xl"
             actions={
               <div className="flex items-center gap-md relative">
-                {/* Search / Command triggers */}
-                <button
-                  onClick={() => setCommandPaletteOpen(true)}
-                  aria-label="Quick command search (Shortcut: Command K)"
-                  className="hidden sm:flex items-center gap-sm px-md py-xs rounded-full bg-surface-container border border-outline-variant/20 text-body-sm text-on-surface-variant hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-primary outline-none transition-colors cursor-pointer"
-                >
-                  <Search className="w-3.5 h-3.5 text-primary" />
-                  <span>Search commands...</span>
-                  <kbd className="font-mono-data text-[10px] px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/30 text-on-surface-variant">
-                    ⌘K
-                  </kbd>
-                </button>
-
                 {/* Notifications trigger */}
                 <div className="relative">
                   <button
@@ -376,11 +304,11 @@ export function RouteLayout() {
                   <Button
                     variant="primary"
                     size="sm"
-                    className="gap-xs h-8 px-md font-semibold bg-primary text-on-primary hover:brightness-110 shadow-md shadow-primary/20"
+                    className="gap-2 h-9 px-4 font-bold bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 hover:brightness-110 active:scale-95 transition-all cursor-pointer border border-cyan-400/30"
                     onClick={() => setConnectModalOpen(true)}
                   >
-                    <LogIn className="w-3.5 h-3.5" />
-                    <span>Connect</span>
+                    <LogIn className="w-4 h-4" />
+                    <span>Connect Wallet</span>
                   </Button>
                 )}
               </div>
@@ -393,69 +321,6 @@ export function RouteLayout() {
           </main>
         </div>
       </div>
-
-      {/* Command Palette Modal */}
-      <AnimatePresence>
-        {commandPaletteOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-background/80 backdrop-blur-md flex items-start justify-center pt-20 px-lg"
-            onClick={() => setCommandPaletteOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: -10 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: -10 }}
-              className="w-full max-w-xl glass-card rounded-xl border border-outline-variant/30 overflow-hidden shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center px-lg py-md border-b border-outline-variant/10">
-                <Search className="w-5 h-5 text-primary mr-md" />
-                <input
-                  type="text"
-                  placeholder="Type a command or navigate page..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="bg-transparent border-none outline-none text-body-md text-on-surface w-full placeholder:text-on-surface-variant/50 font-sans"
-                  autoFocus
-                />
-                <button
-                  onClick={() => setCommandPaletteOpen(false)}
-                  className="p-xs text-on-surface-variant hover:text-on-surface rounded-full"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="max-h-72 overflow-y-auto p-sm flex flex-col gap-xs">
-                {filteredCommands.length > 0 ? (
-                  filteredCommands.map((cmd, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        cmd.action();
-                        setCommandPaletteOpen(false);
-                      }}
-                      className="w-full text-left px-md py-sm rounded-lg hover:bg-surface-bright/50 text-body-sm text-on-surface flex items-center justify-between transition-colors cursor-pointer"
-                    >
-                      <span>{cmd.label}</span>
-                      <span className="material-symbols-outlined text-primary text-sm">
-                        arrow_forward
-                      </span>
-                    </button>
-                  ))
-                ) : (
-                  <div className="p-lg text-center text-on-surface-variant font-body-sm">
-                    No matching commands found.
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Connect Wallet Modal */}
       <AnimatePresence>
