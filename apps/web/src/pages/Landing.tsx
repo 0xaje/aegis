@@ -43,26 +43,6 @@ export default function Landing() {
               Aegis
             </span>
           </div>
-          <div className="hidden md:flex gap-6 items-center ml-4">
-            <button
-              onClick={() => navigate('/app/dashboard')}
-              className="text-cyan-400 font-semibold border-b-2 border-cyan-400 py-1 hover:text-cyan-300 transition-colors cursor-pointer"
-            >
-              Platform Overview
-            </button>
-            <button
-              onClick={() => navigate('/app/intelligence')}
-              className="text-slate-400 hover:text-slate-200 transition-colors py-1 cursor-pointer font-medium"
-            >
-              Confidential Intelligence
-            </button>
-            <button
-              onClick={() => navigate('/app/execution')}
-              className="text-slate-400 hover:text-slate-200 transition-colors py-1 cursor-pointer font-medium"
-            >
-              Enclave Pipeline
-            </button>
-          </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center px-4 py-1.5 bg-slate-900/90 rounded-full border border-white/10 focus-within:border-cyan-500/50 transition-colors backdrop-blur-md">
@@ -110,16 +90,10 @@ export default function Landing() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={() => navigate('/app/intelligence')}
-                className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-sans font-bold text-base px-8 py-4 rounded-xl hover:shadow-lg hover:shadow-cyan-500/30 hover:brightness-110 active:scale-[0.98] transition-all border border-cyan-400/40 cursor-pointer shadow-md"
-              >
-                Generate Intelligence Report
-              </button>
-              <button
                 onClick={() => navigate('/app/dashboard')}
-                className="w-full sm:w-auto bg-slate-900/90 text-slate-200 font-sans font-semibold text-base px-8 py-4 rounded-xl border border-white/15 hover:bg-slate-800/90 hover:text-white transition-all active:scale-[0.98] cursor-pointer backdrop-blur-md hover:border-cyan-500/30"
+                className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-sans font-bold text-base px-10 py-4 rounded-xl hover:shadow-xl hover:shadow-cyan-500/30 hover:brightness-110 active:scale-[0.98] transition-all border border-cyan-400/40 cursor-pointer shadow-lg"
               >
-                View Platform Dashboard
+                Launch Platform
               </button>
             </div>
           </motion.div>
@@ -338,7 +312,7 @@ export default function Landing() {
             {/* Step 2 */}
             <div
               className="relative flex flex-col items-center text-center group cursor-pointer"
-              onClick={() => navigate('/app/simulation')}
+              onClick={() => navigate('/app/dashboard')}
             >
               <div className="w-16 h-16 rounded-full border-premium bg-surface-container-high flex items-center justify-center mb-md relative z-10 step-line group-hover:bg-primary-container transition-all">
                 <span className="material-symbols-outlined text-primary group-hover:text-on-primary-container">
@@ -348,13 +322,13 @@ export default function Landing() {
               <div className="font-label-caps text-label-caps text-primary mb-xs">Phase 02</div>
               <h4 className="font-title-sm text-title-sm mb-sm text-on-surface">Simulate</h4>
               <p className="text-body-sm font-body-sm text-on-surface-variant">
-                Run backtests and Monte Carlo simulations against encrypted historical data.
+                Run backtests and risk calculations against encrypted historical data.
               </p>
             </div>
             {/* Step 3 */}
             <div
               className="relative flex flex-col items-center text-center group cursor-pointer"
-              onClick={() => navigate('/app/simulation')}
+              onClick={() => navigate('/app/dashboard')}
             >
               <div className="w-16 h-16 rounded-full border-premium bg-surface-container-high flex items-center justify-center mb-md relative z-10 step-line group-hover:bg-primary-container transition-all">
                 <span className="material-symbols-outlined text-primary group-hover:text-on-primary-container">
@@ -364,13 +338,13 @@ export default function Landing() {
               <div className="font-label-caps text-label-caps text-primary mb-xs">Phase 03</div>
               <h4 className="font-title-sm text-title-sm mb-sm text-on-surface">Verify</h4>
               <p className="text-body-sm font-body-sm text-on-surface-variant">
-                Generate a zero-knowledge attestation that your simulation logic is valid.
+                Generate a hardware attestation proof that your risk calculation logic is valid.
               </p>
             </div>
             {/* Step 4 */}
             <div
               className="relative flex flex-col items-center text-center group cursor-pointer"
-              onClick={() => navigate('/app/execution')}
+              onClick={() => navigate('/app/dashboard')}
             >
               <div className="w-16 h-16 rounded-full border-premium bg-surface-container-high flex items-center justify-center mb-md relative z-10 group-hover:bg-primary-container transition-all">
                 <span className="material-symbols-outlined text-primary group-hover:text-on-primary-container">
@@ -445,10 +419,10 @@ export default function Landing() {
               execution.
             </p>
             <button
-              onClick={() => navigate('/app/intelligence')}
+              onClick={() => navigate('/app/dashboard')}
               className="bg-primary text-on-primary font-title-sm text-title-sm px-xl py-md rounded-lg hover:brightness-110 shadow-xl shadow-primary/20 active:scale-95 transition-all cursor-pointer"
             >
-              Request Institutional Access
+              Launch Platform
             </button>
           </div>
         </section>
@@ -490,10 +464,10 @@ export default function Landing() {
                   Intelligence
                 </li>
                 <li
-                  onClick={() => navigate('/app/simulation')}
+                  onClick={() => navigate('/app/dashboard')}
                   className="hover:text-primary transition-colors cursor-pointer"
                 >
-                  Simulation
+                  Dashboard
                 </li>
                 <li
                   onClick={() => navigate('/app/execution')}
