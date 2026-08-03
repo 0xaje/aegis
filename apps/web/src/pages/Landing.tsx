@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../hooks/useTheme.js';
+import { Shield } from 'lucide-react';
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,9 +28,9 @@ export default function Landing() {
   };
 
   return (
-    <div className="bg-background text-foreground font-sans min-h-screen selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden bg-cyber-grid transition-colors">
+    <div className="dark bg-[#030712] text-slate-100 font-sans min-h-screen selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden bg-cyber-grid">
       {/* TopNavBar */}
-      <nav className="glass-panel font-sans text-sm sticky top-0 z-50 border-b shadow-2xl flex justify-between items-center px-6 py-3.5 w-full">
+      <nav className="bg-slate-950/80 backdrop-blur-2xl font-sans text-sm sticky top-0 z-50 border-b border-white/10 shadow-2xl flex justify-between items-center px-6 py-3.5 w-full">
         <div className="flex items-center gap-8">
           <div
             onClick={() => navigate('/')}
@@ -57,19 +55,6 @@ export default function Landing() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          {/* Day / Night Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            aria-label={`Switch to ${theme === 'dark' ? 'Day (Light)' : 'Night (Dark)'} mode`}
-            className="p-2 rounded-full hover:bg-slate-800/80 text-slate-300 focus-visible:ring-2 focus-visible:ring-cyan-400 outline-none cursor-pointer transition-colors"
-            title={`Switch to ${theme === 'dark' ? 'Day' : 'Night'} view`}
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-5 h-5 text-amber-400 animate-pulse" />
-            ) : (
-              <Moon className="w-5 h-5 text-indigo-400" />
-            )}
-          </button>
           <button
             onClick={() => navigate('/app/dashboard')}
             className="bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:brightness-110 active:scale-95 transition-all cursor-pointer border border-cyan-400/30"

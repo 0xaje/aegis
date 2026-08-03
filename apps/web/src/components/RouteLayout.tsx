@@ -17,20 +17,14 @@ import {
   Copy,
   AlertTriangle,
   X,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { flareTestnet } from 'viem/chains';
-import { useTheme } from '../hooks/useTheme.js';
 
 export function RouteLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Theme Hook
-  const { theme, toggleTheme } = useTheme();
 
   // Wagmi Web3 Hooks
   const { address, isConnected, chainId } = useAccount();
@@ -268,20 +262,6 @@ export function RouteLayout() {
                   <kbd className="font-mono-data text-[10px] px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant/30 text-on-surface-variant">
                     ⌘K
                   </kbd>
-                </button>
-
-                {/* Day / Night Theme Toggle */}
-                <button
-                  onClick={toggleTheme}
-                  aria-label={`Switch to ${theme === 'dark' ? 'Day (Light)' : 'Night (Dark)'} mode`}
-                  className="p-2 rounded-full hover:bg-surface-bright/50 text-on-surface-variant focus-visible:ring-2 focus-visible:ring-primary outline-none cursor-pointer transition-colors"
-                  title={`Switch to ${theme === 'dark' ? 'Day' : 'Night'} view`}
-                >
-                  {theme === 'dark' ? (
-                    <Sun className="w-5 h-5 text-amber-400 animate-pulse" />
-                  ) : (
-                    <Moon className="w-5 h-5 text-indigo-600" />
-                  )}
                 </button>
 
                 {/* Notifications trigger */}
